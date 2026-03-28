@@ -4,1124 +4,1376 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="real_heyokiaa - Roblox UI Designer and Developer Portfolio. Showcasing Studio UI, layout scaling, and interactive elements.">
-    <meta name="keywords" content="Roblox, UI Design, Kekui, AutoScale, Developer, Portfolio, real_heyokiaa, Studio">
+    <meta name="description" content="real_heyokiaa - Advanced Roblox UI Designer, Scripter, and Developer.">
     <meta name="author" content="real_heyokiaa">
     
-    <title>real_heyokiaa | UI Design Portfolio</title>
+    <title>real_heyokiaa | Interface & Systems</title>
 
     <style>
-        /* ---------------------------------------- */
-        /* 1. CSS VARIABLES & THEME CONFIGURATION   */
-        /* ---------------------------------------- */
+        /* ==========================================================================
+           1. CORE SYSTEM VARIABLES (THEME CONFIGURATION)
+           ========================================================================== */
         :root {
-            /* Color Palette - Dark Mode UI Vibe */
-            --color-bg-base: #0a0a0c;
-            --color-bg-surface: #141418;
-            --color-bg-surface-light: #1e1e24;
+            /* Cyber-Dark Palette */
+            --bg-0: #050507;
+            --bg-1: #0a0a0e;
+            --bg-2: #121218;
+            --bg-3: #1a1a24;
+            --bg-glass: rgba(10, 10, 14, 0.6);
             
-            --color-primary: #3b82f6; /* Roblox Blue Accent */
-            --color-primary-glow: rgba(59, 130, 246, 0.4);
-            --color-secondary: #8b5cf6; /* Purple Accent */
-            --color-accent: #10b981; /* Success Green */
-            
-            --color-text-main: #f3f4f6;
-            --color-text-muted: #9ca3af;
-            --color-text-dark: #1f2937;
-            
-            --color-border: #2dd4bf; /* Teal UI border */
-            --color-border-subtle: #374151;
+            --neon-primary: #00f0ff;
+            --neon-secondary: #ff003c;
+            --neon-accent: #7000ff;
+            --neon-success: #00ff66;
+            --neon-warning: #ffb800;
+
+            --text-100: #ffffff;
+            --text-200: #e0e0e0;
+            --text-300: #a0a0a0;
+            --text-400: #606060;
+            --text-glitch: rgba(255, 255, 255, 0.9);
 
             /* Typography */
-            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-family-mono: "Fira Code", "Courier New", Courier, monospace;
-            
-            --font-size-xs: 0.75rem;
-            --font-size-sm: 0.875rem;
-            --font-size-base: 1rem;
-            --font-size-lg: 1.125rem;
-            --font-size-xl: 1.25rem;
-            --font-size-2xl: 1.5rem;
-            --font-size-3xl: 1.875rem;
-            --font-size-4xl: 2.25rem;
-            --font-size-5xl: 3rem;
-            --font-size-6xl: 4rem;
+            --font-sys: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --font-display: 'Impact', 'Arial Black', sans-serif;
 
-            /* Spacing Metrics */
-            --space-1: 0.25rem;
-            --space-2: 0.5rem;
-            --space-3: 0.75rem;
-            --space-4: 1rem;
-            --space-5: 1.25rem;
-            --space-6: 1.5rem;
-            --space-8: 2rem;
-            --space-10: 2.5rem;
-            --space-12: 3rem;
-            --space-16: 4rem;
-            --space-20: 5rem;
-            --space-24: 6rem;
-            --space-32: 8rem;
+            /* Spacing Grid (8px baseline) */
+            --sp-1: 8px;
+            --sp-2: 16px;
+            --sp-3: 24px;
+            --sp-4: 32px;
+            --sp-5: 40px;
+            --sp-6: 48px;
+            --sp-8: 64px;
+            --sp-10: 80px;
+            --sp-12: 96px;
+            --sp-16: 128px;
+            --sp-20: 160px;
 
-            /* Border Radius */
-            --radius-sm: 0.25rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-            --radius-2xl: 1.5rem;
-            --radius-full: 9999px;
+            /* Radii */
+            --rad-sm: 4px;
+            --rad-md: 8px;
+            --rad-lg: 16px;
+            --rad-xl: 24px;
+            --rad-max: 9999px;
 
-            /* Shadows & Depth */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-            --shadow-glow: 0 0 20px var(--color-primary-glow);
-
-            /* Transitions */
-            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-            /* Z-Index Layers */
-            --z-behind: -1;
-            --z-normal: 1;
-            --z-elevated: 10;
-            --z-nav: 50;
-            --z-modal: 100;
+            /* Z-Index Architecture */
+            --z-bg: -100;
+            --z-base: 1;
+            --z-content: 10;
+            --z-float: 50;
+            --z-nav: 100;
+            --z-modal: 1000;
+            --z-loader: 2000;
             --z-cursor: 9999;
+
+            /* Animation Timings */
+            --ts-fast: 0.15s;
+            --ts-mid: 0.3s;
+            --ts-slow: 0.6s;
+            --ts-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ts-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+            /* Shadows & Glows */
+            --glow-primary: 0 0 20px rgba(0, 240, 255, 0.3);
+            --glow-secondary: 0 0 30px rgba(255, 0, 60, 0.3);
+            --glow-text: 0 0 10px rgba(0, 240, 255, 0.5);
+            --shadow-card: 0 20px 40px rgba(0,0,0,0.8);
+            --shadow-glass: inset 0 0 0 1px rgba(255,255,255,0.05);
+            
+            /* Structural Variables */
+            --container-width: 1400px;
+            --nav-height: 80px;
         }
 
-        /* ---------------------------------------- */
-        /* 2. CSS RESET & GLOBAL STYLES             */
-        /* ---------------------------------------- */
+        /* ==========================================================================
+           2. RESET & NORMALIZATION
+           ========================================================================== */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            cursor: none; /* Enforce Custom Cursor System Wide */
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
             font-size: 16px;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            background: var(--bg-0);
+            color: var(--text-200);
+            font-family: var(--font-sys);
+            overscroll-behavior: none;
+            /* Hide default scrollbar for custom scroll engine */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        
+        html::-webkit-scrollbar {
+            display: none;
         }
 
         body {
-            background-color: var(--color-bg-base);
-            color: var(--color-text-main);
-            font-family: var(--font-family-sans);
-            line-height: 1.5;
             overflow-x: hidden;
             width: 100vw;
             min-height: 100vh;
-            /* Hide default cursor for custom cursor */
-            cursor: none; 
+            line-height: 1.6;
+            position: relative;
         }
 
-        /* Links & Buttons Reset */
-        a {
-            color: inherit;
-            text-decoration: none;
-            cursor: none; /* Inherit custom cursor */
+        ::selection {
+            background: var(--neon-primary);
+            color: var(--bg-0);
         }
 
-        button {
-            background: none;
-            border: none;
-            cursor: none;
-            font-family: inherit;
-            color: inherit;
-            outline: none;
-        }
+        ul, ol { list-style: none; }
+        a { text-decoration: none; color: inherit; }
+        button, input, textarea { font-family: inherit; border: none; background: none; outline: none; }
+        img, video, svg { max-width: 100%; display: block; }
 
-        ul, ol {
-            list-style: none;
-        }
-
-        img, video {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* Typography Tags */
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--color-text-main);
-        }
-
-        p {
-            margin-bottom: var(--space-4);
-        }
-
-        /* ---------------------------------------- */
-        /* 3. CUSTOM CURSOR                         */
-        /* ---------------------------------------- */
-        #custom-cursor-dot {
+        /* ==========================================================================
+           3. SYSTEM LOADER (TERMINAL BOOT SEQUENCE)
+           ========================================================================== */
+        #sys-loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 8px;
-            height: 8px;
-            background-color: var(--color-primary);
-            border-radius: var(--radius-full);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: var(--z-cursor);
-            transition: width var(--transition-fast), height var(--transition-fast), background-color var(--transition-fast);
-        }
-
-        #custom-cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--color-primary);
-            border-radius: var(--radius-full);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: var(--z-cursor);
-            transition: transform 0.1s ease-out, width var(--transition-fast), height var(--transition-fast), border-color var(--transition-fast);
-        }
-
-        /* Cursor Hover States applied via JS classes */
-        .cursor-hover #custom-cursor-dot {
-            width: 12px;
-            height: 12px;
-            background-color: var(--color-accent);
-        }
-
-        .cursor-hover #custom-cursor-ring {
-            width: 60px;
-            height: 60px;
-            border-color: var(--color-accent);
-            background-color: rgba(16, 185, 129, 0.1);
-        }
-
-        /* ---------------------------------------- */
-        /* 4. BACKGROUND CANVAS (PARTICLES)         */
-        /* ---------------------------------------- */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: var(--z-behind);
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        /* ---------------------------------------- */
-        /* 5. NAVIGATION BAR                        */
-        /* ---------------------------------------- */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 var(--space-8);
-            background-color: rgba(10, 10, 12, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-border-subtle);
-            z-index: var(--z-nav);
-            transition: transform var(--transition-normal);
-        }
-
-        .navbar.hidden {
-            transform: translateY(-100%);
-        }
-
-        .nav-logo {
-            font-size: var(--font-size-2xl);
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: var(--color-text-main);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-
-        .nav-logo span {
-            color: var(--color-primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: var(--space-6);
-        }
-
-        .nav-link {
-            font-size: var(--font-size-sm);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--color-text-muted);
-            transition: color var(--transition-fast);
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background-color: var(--color-primary);
-            transition: width var(--transition-normal);
-        }
-
-        .nav-link:hover {
-            color: var(--color-text-main);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* ---------------------------------------- */
-        /* 6. HERO SECTION                          */
-        /* ---------------------------------------- */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--space-8);
-            text-align: center;
-            z-index: var(--z-normal);
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: var(--space-2) var(--space-4);
-            background-color: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--color-primary-glow);
-            border-radius: var(--radius-full);
-            font-size: var(--font-size-sm);
-            color: var(--color-primary);
-            margin-bottom: var(--space-6);
-            animation: pulse-border 2s infinite;
-        }
-
-        .hero-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: var(--space-6);
-            background: linear-gradient(135deg, #ffffff 0%, #9ca3af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: var(--font-size-xl);
-            color: var(--color-text-muted);
-            max-width: 600px;
-            margin-bottom: var(--space-10);
-            height: 40px; /* fixed height for typewriter */
-        }
-
-        /* Typewriter Cursor */
-        .type-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background-color: var(--color-primary);
-            vertical-align: middle;
-            margin-left: 2px;
-            animation: blink 1s step-end infinite;
-        }
-
-        .hero-scroll-indicator {
-            position: absolute;
-            bottom: var(--space-10);
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-2);
-            color: var(--color-text-muted);
-            font-size: var(--font-size-sm);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .mouse-icon {
-            width: 24px;
-            height: 36px;
-            border: 2px solid var(--color-text-muted);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .mouse-wheel {
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 8px;
-            background-color: var(--color-primary);
-            border-radius: 2px;
-            animation: scroll-wheel 2s infinite;
-        }
-
-        /* ---------------------------------------- */
-        /* 7. SECTION HEADERS                       */
-        /* ---------------------------------------- */
-        .section-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--space-24) var(--space-8);
-            position: relative;
-            z-index: var(--z-normal);
-        }
-
-        .section-header {
-            margin-bottom: var(--space-16);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .section-title {
-            font-size: var(--font-size-4xl);
-            position: relative;
-            display: inline-block;
-            margin-bottom: var(--space-4);
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--color-primary);
-            border-radius: var(--radius-full);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .section-desc {
-            color: var(--color-text-muted);
-            font-size: var(--font-size-lg);
-            max-width: 800px;
-        }
-
-        /* ---------------------------------------- */
-        /* 8. UI GALLERY GRID SYSTEM                */
-        /* ---------------------------------------- */
-        /* Filtering Controls */
-        .gallery-filters {
-            display: flex;
-            gap: var(--space-4);
-            margin-bottom: var(--space-10);
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: var(--space-2) var(--space-6);
-            background-color: var(--color-bg-surface);
-            border: 1px solid var(--color-border-subtle);
-            border-radius: var(--radius-full);
-            color: var(--color-text-muted);
-            font-weight: 600;
-            font-size: var(--font-size-sm);
-            transition: all var(--transition-normal);
-        }
-
-        .filter-btn:hover {
-            border-color: var(--color-primary);
-            color: var(--color-text-main);
-        }
-
-        .filter-btn.active {
-            background-color: var(--color-primary);
-            color: #fff;
-            border-color: var(--color-primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        /* The Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            grid-gap: var(--space-8);
-            width: 100%;
-        }
-
-        /* Gallery Item Card */
-        .gallery-item {
-            background-color: var(--color-bg-surface);
-            border: 1px solid var(--color-border-subtle);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            position: relative;
-            transition: transform var(--transition-bounce), border-color var(--transition-normal), box-shadow var(--transition-normal);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-10px);
-            border-color: var(--color-primary);
-            box-shadow: var(--shadow-xl), var(--shadow-glow);
-        }
-
-        /* Thumbnail Container */
-        .item-thumbnail {
-            width: 100%;
-            height: 240px;
-            position: relative;
-            background-color: #000;
-            overflow: hidden;
-        }
-
-        .item-thumbnail img,
-        .item-thumbnail video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform var(--transition-slow);
-        }
-
-        .gallery-item:hover .item-thumbnail img,
-        .gallery-item:hover .item-thumbnail video {
-            transform: scale(1.05);
-        }
-
-        /* Overlay on Hover */
-        .item-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
-            opacity: 0;
-            transition: opacity var(--transition-normal);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-0);
+            z-index: var(--z-loader);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: var(--space-4);
+            padding: var(--sp-8);
+            font-family: var(--font-mono);
+            color: var(--neon-primary);
+            transition: opacity 1s var(--ts-expo), transform 1s var(--ts-expo);
         }
 
-        .gallery-item:hover .item-overlay {
-            opacity: 1;
-        }
-
-        /* Media Type Badge (Photo vs Video) */
-        .media-badge {
-            position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            color: #fff;
-            padding: var(--space-1) var(--space-3);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-            border: 1px solid rgba(255,255,255,0.1);
-            z-index: 2;
-        }
-
-        /* Play button icon for video thumbnails */
-        .play-icon {
-            width: 12px;
-            height: 12px;
-            fill: currentColor;
-        }
-
-        /* Info Section below thumbnail */
-        .item-info {
-            padding: var(--space-5);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .item-title {
-            font-size: var(--font-size-xl);
-            margin-bottom: var(--space-2);
-            color: var(--color-text-main);
-            font-weight: 700;
-        }
-
-        .item-desc {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-4);
-            flex-grow: 1;
-        }
-
-        .item-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2);
-            margin-top: auto;
-        }
-
-        .tag {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            background-color: var(--color-bg-surface-light);
-            border: 1px solid var(--color-border-subtle);
-            border-radius: var(--radius-sm);
-            color: var(--color-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Expand Button */
-        .btn-expand {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 50px;
-            height: 50px;
-            background-color: var(--color-primary);
-            border-radius: var(--radius-full);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        #sys-loader.boot-complete {
             opacity: 0;
-            transition: all var(--transition-bounce);
-            box-shadow: var(--shadow-glow);
-            z-index: 3;
+            transform: translateY(-100%);
+            pointer-events: none;
         }
 
-        .btn-expand svg {
-            width: 24px;
-            height: 24px;
-            fill: #fff;
+        .loader-log {
+            font-size: 0.85rem;
+            margin-bottom: var(--sp-1);
+            opacity: 0.8;
+            text-shadow: var(--glow-text);
+            display: flex;
+            gap: var(--sp-2);
         }
 
-        .gallery-item:hover .btn-expand {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+        .loader-log .timestamp {
+            color: var(--text-400);
         }
 
-        /* ---------------------------------------- */
-        /* 9. LIGHTBOX MODAL SYSTEM                 */
-        /* ---------------------------------------- */
-        .lightbox {
+        .loader-bar-container {
+            width: 100%;
+            height: 2px;
+            background: var(--bg-2);
+            margin-top: var(--sp-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            position: absolute;
+            top: 0; left: 0; height: 100%;
+            width: 0%;
+            background: var(--neon-primary);
+            box-shadow: var(--glow-primary);
+            transition: width 0.1s linear;
+        }
+
+        /* ==========================================================================
+           4. CUSTOM CURSOR ENGINE
+           ========================================================================== */
+        #cursor-core {
             position: fixed;
+            top: 0; left: 0;
+            width: 6px; height: 6px;
+            background: var(--neon-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: var(--z-cursor);
+            transition: width var(--ts-fast), height var(--ts-fast), background var(--ts-fast);
+            box-shadow: 0 0 10px var(--neon-primary);
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: var(--z-cursor);
+            transition: width 0.3s var(--ts-expo), height 0.3s var(--ts-expo), border-color var(--ts-fast), background var(--ts-fast);
+        }
+
+        /* Magnetic State Hover overrides */
+        body.cursor-magnetic #cursor-core {
+            width: 0px; height: 0px; opacity: 0;
+        }
+        body.cursor-magnetic #cursor-ring {
+            width: 60px; height: 60px;
+            border-color: var(--neon-secondary);
+            background: rgba(255, 0, 60, 0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        /* ==========================================================================
+           5. CANVAS BACKGROUND (INTERACTIVE NODES)
+           ========================================================================== */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: var(--z-bg);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Ambient global grid overlay */
+        .ambient-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: var(--z-bg);
+            pointer-events: none;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .ambient-grid::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-0) 80%);
+        }
+
+        /* ==========================================================================
+           6. NAVIGATION SUBSYSTEM
+           ========================================================================== */
+        .sys-nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--sp-10);
+            z-index: var(--z-nav);
+            background: linear-gradient(to bottom, rgba(5,5,7,0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: transform var(--ts-mid) var(--ts-expo);
+        }
+
+        .sys-nav.hide {
+            transform: translateY(-100%);
+        }
+
+        .nav-brand {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-100);
+            display: flex;
+            align-items: center;
+            gap: var(--sp-2);
+            position: relative;
+        }
+
+        .nav-brand::before {
+            content: 'sys.init()';
+            font-size: 0.6rem;
+            position: absolute;
+            top: -15px; left: 0;
+            color: var(--neon-primary);
+        }
+
+        .nav-brand .accent { color: var(--neon-primary); }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--sp-6);
+        }
+
+        .nav-item {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-300);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: var(--sp-1) 0;
+            transition: color var(--ts-fast);
+        }
+
+        .nav-item::before {
+            content: '0' counter(nav-idx) '.';
+            counter-increment: nav-idx;
+            color: var(--neon-primary);
+            margin-right: var(--sp-1);
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        .nav-menu { counter-reset: nav-idx; }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0%; height: 1px;
+            background: var(--neon-primary);
+            transition: width var(--ts-mid) var(--ts-expo);
+        }
+
+        .nav-item:hover { color: var(--text-100); }
+        .nav-item:hover::after { width: 100%; }
+
+        /* Status Indicator */
+        .sys-status {
+            display: flex;
+            align-items: center;
+            gap: var(--sp-2);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--neon-success);
+            border: 1px solid rgba(0,255,102,0.2);
+            padding: var(--sp-1) var(--sp-2);
+            border-radius: var(--rad-max);
+            background: rgba(0,255,102,0.05);
+        }
+        
+        .sys-status .ping {
+            width: 6px; height: 6px;
+            background: var(--neon-success);
+            border-radius: 50%;
+            animation: ping 2s infinite;
+        }
+
+        /* ==========================================================================
+           7. HERO SECTION (GLITCH & PARALLAX)
+           ========================================================================== */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .hero-content {
+            text-align: center;
+            transform-style: preserve-3d;
+            z-index: var(--z-content);
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            color: var(--neon-primary);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            margin-bottom: var(--sp-4);
+            display: inline-block;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: var(--sp-1) var(--sp-3);
+            background: rgba(0, 240, 255, 0.05);
+            transform: translateZ(20px);
+        }
+
+        /* Advanced Glitch Text System */
+        .glitch-wrapper {
+            position: relative;
+            transform: translateZ(50px);
+        }
+
+        .glitch-text {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 900;
+            color: var(--text-100);
+            line-height: 1;
+            margin-bottom: var(--sp-2);
+            position: relative;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-secondary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim-1 5s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-primary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim-2 5s infinite linear alternate-reverse;
+        }
+
+        .hero-sub {
+            font-size: 1.5rem;
+            color: var(--text-300);
+            max-width: 600px;
+            margin: 0 auto;
+            transform: translateZ(30px);
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--sp-10);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--sp-2);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-400);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--neon-primary), transparent);
+            animation: scroll-line-anim 2s infinite cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* ==========================================================================
+           8. LAYOUT ARCHITECTURE & UTILITIES
+           ========================================================================== */
+        .section-wrap {
+            padding: var(--sp-20) var(--sp-10);
+            max-width: var(--container-width);
+            margin: 0 auto;
+            position: relative;
+            z-index: var(--z-content);
+        }
+
+        .sec-header {
+            margin-bottom: var(--sp-12);
+            position: relative;
+        }
+
+        .sec-num {
+            font-family: var(--font-mono);
+            font-size: 4rem;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            z-index: -1;
+        }
+
+        .sec-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-100);
+            display: flex;
+            align-items: center;
+            gap: var(--sp-4);
+        }
+
+        .sec-title::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+        }
+
+        .sec-desc {
+            font-size: 1.2rem;
+            color: var(--text-300);
+            max-width: 700px;
+            margin-top: var(--sp-4);
+        }
+
+        /* ==========================================================================
+           9. CURRENT WORKED ON THINGS (TIMELINE / ROADMAP GIMMICK)
+           ========================================================================== */
+        .roadmap-container {
+            position: relative;
+            padding-left: var(--sp-6);
+            border-left: 2px solid var(--bg-3);
+        }
+
+        .roadmap-node {
+            position: relative;
+            margin-bottom: var(--sp-10);
+            padding: var(--sp-6);
+            background: var(--bg-1);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--rad-lg);
+            transition: transform var(--ts-mid), border-color var(--ts-mid), box-shadow var(--ts-mid);
+        }
+
+        .roadmap-node::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: calc(var(--sp-6) * -1 - 9px); /* Align with border */
+            width: 16px;
+            height: 16px;
+            background: var(--bg-0);
+            border: 2px solid var(--neon-primary);
+            border-radius: 50%;
+            transition: background var(--ts-mid), box-shadow var(--ts-mid);
+        }
+
+        .roadmap-node:hover {
+            transform: translateX(10px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .roadmap-node:hover::before {
+            background: var(--neon-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .node-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sp-2);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--neon-primary);
+        }
+
+        .node-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(0,255,102,0.1);
+            border: 1px solid rgba(0,255,102,0.3);
+            border-radius: var(--rad-max);
+            color: var(--neon-success);
+        }
+        
+        .node-status.dev {
+            background: rgba(255,184,0,0.1);
+            border-color: rgba(255,184,0,0.3);
+            color: var(--neon-warning);
+        }
+
+        .node-title {
+            font-size: 2rem;
+            color: var(--text-100);
+            margin-bottom: var(--sp-2);
+        }
+
+        .node-desc {
+            color: var(--text-300);
+            margin-bottom: var(--sp-4);
+        }
+
+        .node-tags {
+            display: flex;
+            gap: var(--sp-2);
+            flex-wrap: wrap;
+        }
+
+        .sys-tag {
+            padding: 4px 12px;
+            background: var(--bg-2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--rad-sm);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-300);
+        }
+
+        /* ==========================================================================
+           10. STUDIO UI GALLERY (3D TILT CARDS & MASONRY)
+           ========================================================================== */
+        .filter-sys {
+            display: flex;
+            gap: var(--sp-2);
+            margin-bottom: var(--sp-8);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: var(--sp-4);
+        }
+
+        .filter-btn {
+            padding: var(--sp-2) var(--sp-4);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-400);
+            border: 1px solid transparent;
+            transition: all var(--ts-fast);
+            position: relative;
+        }
+
+        .filter-btn:hover { color: var(--text-200); }
+        .filter-btn.active {
+            color: var(--neon-primary);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: var(--rad-sm);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--sp-6);
+            perspective: 1500px;
+        }
+
+        /* The Tilt Card System */
+        .ui-card {
+            background: var(--bg-1);
+            border-radius: var(--rad-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: box-shadow var(--ts-mid);
+            /* Transform set via JS for tilt */
+        }
+
+        .ui-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--ts-mid);
+        }
+
+        .ui-card:hover {
+            box-shadow: var(--shadow-card), 0 0 20px rgba(0, 240, 255, 0.1);
+            z-index: 10;
+        }
+
+        .ui-card:hover::before { opacity: 1; }
+
+        .card-media {
+            height: 260px;
+            width: 100%;
+            background: var(--bg-2);
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(20px); /* 3D pop effect */
+        }
+
+        /* Procedural CSS Pattern Backgrounds as strict placeholders to avoid broken images */
+        .media-bg-1 {
+            background-color: #1e1e24;
+            background-image: radial-gradient(#3b82f6 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .media-bg-2 {
+            background: repeating-linear-gradient(45deg, #121218, #121218 10px, #1a1a24 10px, #1a1a24 20px);
+        }
+        .media-bg-3 {
+            background: linear-gradient(135deg, #0a0a0e 25%, transparent 25%) -50px 0,
+                        linear-gradient(225deg, #0a0a0e 25%, transparent 25%) -50px 0,
+                        linear-gradient(315deg, #0a0a0e 25%, transparent 25%),
+                        linear-gradient(45deg, #0a0a0e 25%, transparent 25%);
+            background-size: 100px 100px;
+            background-color: #161b22;
+        }
+        .media-bg-4 {
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.2) 0%, transparent 60%), var(--bg-2);
+        }
+
+        /* SVG Video/Photo Indicators */
+        .media-type-icon {
+            position: absolute;
+            top: var(--sp-3);
+            right: var(--sp-3);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 6px 10px;
+            border-radius: var(--rad-md);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: #fff;
+            transform: translateZ(30px);
+            z-index: 5;
+        }
+
+        .media-type-icon svg { width: 14px; height: 14px; fill: currentColor; }
+
+        /* The inner structure representation (simulating UI layout) */
+        .wireframe-ui {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; height: 70%;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: var(--rad-md);
+            display: flex; flex-direction: column; gap: 8px;
+            padding: 8px;
+        }
+        .wire-header { height: 20px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+        .wire-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-grow: 1; }
+        .wire-box { background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 4px; }
+        .wire-box.alt { background: rgba(255, 0, 60, 0.1); border-color: rgba(255, 0, 60, 0.2); }
+
+        .card-info {
+            padding: var(--sp-4);
+            transform: translateZ(10px);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: var(--text-100);
+            margin-bottom: var(--sp-1);
+        }
+
+        .card-tech {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--neon-accent);
+            margin-bottom: var(--sp-3);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-300);
+            margin-bottom: var(--sp-4);
+            line-height: 1.5;
+        }
+
+        /* Hover action button */
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--neon-primary);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all var(--ts-mid);
+        }
+
+        .ui-card:hover .card-action {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .card-action svg { width: 16px; height: 16px; fill: currentColor; transition: transform var(--ts-fast); }
+        .card-action:hover svg { transform: translateX(5px); }
+
+        /* ==========================================================================
+           11. LIGHTBOX SUBSYSTEM (MODAL VIEW)
+           ========================================================================== */
+        #lightbox-sys {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 5, 7, 0.95);
+            backdrop-filter: blur(20px);
             z-index: var(--z-modal);
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity var(--transition-normal), visibility var(--transition-normal);
+            transition: opacity var(--ts-mid), visibility var(--ts-mid);
         }
 
-        .lightbox.active {
-            opacity: 1;
-            visibility: visible;
+        #lightbox-sys.active {
+            opacity: 1; visibility: visible;
         }
 
-        .lightbox-content-wrapper {
-            position: relative;
-            width: 90%;
-            max-width: 1200px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform: scale(0.95);
-            transition: transform var(--transition-bounce);
+        .lb-container {
+            width: 90%; max-width: 1200px;
+            display: flex; flex-direction: column;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.5s var(--ts-expo);
         }
 
-        .lightbox.active .lightbox-content-wrapper {
-            transform: scale(1);
+        #lightbox-sys.active .lb-container {
+            transform: scale(1) translateY(0);
         }
 
-        .lightbox-media {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+        .lb-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--sp-4);
+            padding-bottom: var(--sp-4);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .lightbox-media img,
-        .lightbox-media video {
-            max-width: 100%;
-            max-height: 75vh;
-            object-fit: contain;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--color-border-subtle);
-        }
+        .lb-title { font-size: 1.5rem; color: var(--text-100); }
+        .lb-meta { font-family: var(--font-mono); color: var(--neon-primary); font-size: 0.9rem; }
 
-        .lightbox-details {
-            margin-top: var(--space-6);
-            text-align: center;
+        .lb-close {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
             color: #fff;
-            background: var(--color-bg-surface);
-            padding: var(--space-4) var(--space-8);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border-subtle);
-            width: 100%;
-            max-width: 800px;
+            transition: all var(--ts-fast);
         }
+        .lb-close:hover { background: rgba(255,0,60,0.2); border-color: var(--neon-secondary); color: var(--neon-secondary); transform: rotate(90deg); }
 
-        .lightbox-title {
-            font-size: var(--font-size-2xl);
-            margin-bottom: var(--space-2);
-            color: var(--color-primary);
-        }
-
-        /* Lightbox Controls */
-        .lightbox-btn {
-            position: absolute;
-            background: rgba(30, 30, 36, 0.8);
-            border: 1px solid var(--color-border-subtle);
-            color: #fff;
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-full);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all var(--transition-fast);
-            z-index: calc(var(--z-modal) + 1);
-        }
-
-        .lightbox-btn:hover {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
-            transform: scale(1.1);
-        }
-
-        .lightbox-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-
-        .btn-close {
-            top: var(--space-6);
-            right: var(--space-6);
-            position: fixed;
-        }
-
-        .btn-prev {
-            left: var(--space-4);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .btn-next {
-            right: var(--space-4);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .btn-prev:hover, .btn-next:hover {
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        /* ---------------------------------------- */
-        /* 10. SCROLL REVEAL ANIMATIONS             */
-        /* ---------------------------------------- */
-        .reveal-up {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-            will-change: opacity, visibility;
-        }
-
-        .reveal-up.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Staggered delays for grid items */
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
-        .delay-500 { transition-delay: 500ms; }
-
-        /* ---------------------------------------- */
-        /* 11. FOOTER                               */
-        /* ---------------------------------------- */
-        .footer {
-            border-top: 1px solid var(--color-border-subtle);
-            background-color: var(--color-bg-surface);
-            padding: var(--space-12) var(--space-8);
-            text-align: center;
+        .lb-media-stage {
+            width: 100%; height: 60vh;
+            background: var(--bg-1);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--rad-lg);
             position: relative;
-            z-index: var(--z-normal);
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        
+        .lb-media-stage .wireframe-ui { transform: translate(-50%, -50%) scale(1.5); }
+
+        .lb-controls {
+            position: absolute; top: 50%; left: 0; width: 100%;
+            display: flex; justify-content: space-between; padding: 0 var(--sp-4);
+            transform: translateY(-50%); pointer-events: none;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-6);
+        .lb-btn {
+            width: 50px; height: 50px;
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%; color: #fff; pointer-events: auto;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); transition: all var(--ts-fast);
         }
+        .lb-btn:hover { background: var(--neon-primary); border-color: var(--neon-primary); color: #000; transform: scale(1.1); }
+        .lb-btn svg { width: 24px; height: 24px; fill: currentColor; }
 
-        .footer-logo {
-            font-size: var(--font-size-2xl);
-            font-weight: 800;
-        }
-
-        .footer-text {
-            color: var(--color-text-muted);
-            max-width: 500px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: var(--space-4);
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-full);
-            background-color: var(--color-bg-surface-light);
-            border: 1px solid var(--color-border-subtle);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all var(--transition-fast);
-        }
-
-        .social-link:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .social-link svg {
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-        }
-
-        .copyright {
-            margin-top: var(--space-8);
-            padding-top: var(--space-4);
+        /* ==========================================================================
+           12. TERMINAL FOOTER / CONTACT
+           ========================================================================== */
+        .terminal-footer {
+            background: var(--bg-1);
             border-top: 1px solid rgba(255,255,255,0.05);
-            width: 100%;
-            color: var(--color-text-muted);
-            font-size: var(--font-size-sm);
+            padding: var(--sp-10) var(--sp-10);
+            position: relative;
+            z-index: var(--z-content);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--sp-10);
         }
 
-        /* ---------------------------------------- */
-        /* 12. KEYFRAME ANIMATIONS                  */
-        /* ---------------------------------------- */
-        @keyframes pulse-border {
-            0% { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-            70% { border-color: rgba(59, 130, 246, 0.8); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        .terminal-ui {
+            background: var(--bg-0);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--rad-md);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        @keyframes blink {
+        .term-header {
+            background: var(--bg-2);
+            padding: var(--sp-2) var(--sp-4);
+            display: flex; align-items: center; gap: var(--sp-2);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .term-dots { display: flex; gap: 6px; }
+        .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .td-r { background: #ff5f56; } .td-y { background: #ffbd2e; } .td-g { background: #27c93f; }
+        .term-title { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-400); margin-left: auto; }
+
+        .term-body {
+            padding: var(--sp-4);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-200);
+            min-height: 200px;
+        }
+
+        .term-line { margin-bottom: 8px; }
+        .term-prompt { color: var(--neon-primary); margin-right: 8px; }
+        .term-cmd { color: var(--neon-success); }
+        .term-out { color: var(--text-300); margin-top: 4px; padding-left: 16px; }
+
+        .term-input-line { display: flex; align-items: center; margin-top: 16px; }
+        .term-cursor {
+            display: inline-block; width: 8px; height: 1.2em;
+            background: var(--text-200); margin-left: 4px;
+            animation: terminal-blink 1s step-end infinite;
+        }
+
+        .footer-info {
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        .footer-brand {
+            font-size: 2rem; font-weight: 800; color: var(--text-100);
+            margin-bottom: var(--sp-2); display: flex; align-items: center; gap: var(--sp-2);
+        }
+
+        .social-matrix {
+            display: flex; gap: var(--sp-4); margin-top: var(--sp-6);
+        }
+
+        .soc-link {
+            width: 50px; height: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--rad-md);
+            display: flex; justify-content: center; align-items: center;
+            color: var(--text-300); transition: all var(--ts-mid);
+            position: relative; overflow: hidden;
+        }
+        
+        .soc-link::before {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+            background: var(--neon-primary); transition: height var(--ts-mid); z-index: 0;
+        }
+
+        .soc-link:hover { border-color: var(--neon-primary); color: #000; box-shadow: var(--glow-primary); }
+        .soc-link:hover::before { height: 100%; }
+        .soc-link svg { width: 20px; height: 20px; fill: currentColor; position: relative; z-index: 1; }
+
+        .copyright-line {
+            margin-top: var(--sp-8); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-400);
+        }
+
+        /* ==========================================================================
+           13. ANIMATIONS & KEYFRAMES
+           ========================================================================== */
+        @keyframes ping {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,102,0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(0,255,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,255,102,0); }
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 85px, 0); transform: translate(0); }
+            10% { clip: rect(61px, 9999px, 35px, 0); transform: translate(-2px, 2px); }
+            20% { clip: rect(15px, 9999px, 94px, 0); transform: translate(2px, -2px); }
+            30% { clip: rect(80px, 9999px, 12px, 0); transform: translate(-2px, 2px); }
+            40% { clip: rect(44px, 9999px, 50px, 0); transform: translate(2px, -2px); }
+            50% { clip: rect(98px, 9999px, 3px, 0); transform: translate(-2px, 2px); }
+            60% { clip: rect(32px, 9999px, 78px, 0); transform: translate(2px, -2px); }
+            70% { clip: rect(74px, 9999px, 25px, 0); transform: translate(-2px, 2px); }
+            80% { clip: rect(10px, 9999px, 88px, 0); transform: translate(2px, -2px); }
+            90% { clip: rect(55px, 9999px, 42px, 0); transform: translate(-2px, 2px); }
+            100% { clip: rect(90px, 9999px, 15px, 0); transform: translate(0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(80px, 9999px, 15px, 0); transform: translate(0); }
+            10% { clip: rect(25px, 9999px, 90px, 0); transform: translate(2px, -2px); }
+            20% { clip: rect(66px, 9999px, 44px, 0); transform: translate(-2px, 2px); }
+            30% { clip: rect(12px, 9999px, 85px, 0); transform: translate(2px, -2px); }
+            40% { clip: rect(94px, 9999px, 20px, 0); transform: translate(-2px, 2px); }
+            50% { clip: rect(35px, 9999px, 60px, 0); transform: translate(2px, -2px); }
+            60% { clip: rect(78px, 9999px, 10px, 0); transform: translate(-2px, 2px); }
+            70% { clip: rect(5px, 9999px, 95px, 0); transform: translate(2px, -2px); }
+            80% { clip: rect(50px, 9999px, 33px, 0); transform: translate(-2px, 2px); }
+            90% { clip: rect(88px, 9999px, 55px, 0); transform: translate(2px, -2px); }
+            100% { clip: rect(15px, 9999px, 75px, 0); transform: translate(0); }
+        }
+
+        @keyframes scroll-line-anim {
+            0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+            50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+            50.1% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+        }
+
+        @keyframes terminal-blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, 10px); }
+        /* Scroll Reveal Utilities */
+        .sys-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1), transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: opacity, transform;
         }
+        .sys-reveal.revealed { opacity: 1; transform: translateY(0); }
 
-        @keyframes scroll-wheel {
-            0% { transform: translate(-50%, 0); opacity: 1; }
-            100% { transform: translate(-50%, 15px); opacity: 0; }
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            .terminal-footer { grid-template-columns: 1fr; }
+            .hero-text { font-size: 4rem; }
         }
-
-        /* ---------------------------------------- */
-        /* 13. MEDIA QUERIES (RESPONSIVE)           */
-        /* ---------------------------------------- */
         @media (max-width: 768px) {
-            .hero-title { font-size: 3rem; }
-            .hero-subtitle { font-size: 1.2rem; }
-            .section-title { font-size: 2.5rem; }
-            .nav-links { display: none; /* Hide on mobile for simplicity in this template */ }
-            
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .lightbox-btn {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .btn-prev { left: 10px; }
-            .btn-next { right: 10px; }
-            .btn-close { top: 10px; right: 10px; }
-        }
-
-        /* Utility Classes for JS Manipulation */
-        .hidden-element { display: none !important; }
-        .no-scroll { overflow: hidden !important; }
-
-        /* Loader */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--color-bg-base);
-            z-index: 99999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(59, 130, 246, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--color-primary);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            .nav-menu { display: none; } /* Simplified mobile nav for demo */
+            .sec-title { font-size: 2rem; }
+            .sec-num { font-size: 2.5rem; top: -20px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            /* Disable custom cursor on touch */
+            #cursor-core, #cursor-ring { display: none; }
+            *, *::before, *::after { cursor: auto; }
         }
 
     </style>
 </head>
-<body>
+<body id="sys-body">
 
-    <div id="loader">
-        <div class="spinner"></div>
+    <div id="sys-loader">
+        <div id="loader-logs-container">
+            </div>
+        <div class="loader-bar-container">
+            <div class="loader-bar-fill" id="loader-fill"></div>
+        </div>
     </div>
 
-    <div id="custom-cursor-dot"></div>
-    <div id="custom-cursor-ring"></div>
+    <div id="cursor-core"></div>
+    <div id="cursor-ring"></div>
+    
+    <div class="ambient-grid"></div>
+    <canvas id="bg-canvas"></canvas>
 
-    <canvas id="particle-canvas"></canvas>
-
-    <nav class="navbar" id="navbar">
-        <div class="nav-logo">real_<span>heyokiaa</span></div>
-        <ul class="nav-links">
-            <li><a href="#home" class="nav-link custom-hover">Home</a></li>
-            <li><a href="#portfolio" class="nav-link custom-hover">Studio UI</a></li>
-            <li><a href="#contact" class="nav-link custom-hover">Contact</a></li>
-        </ul>
+    <nav class="sys-nav" id="sys-nav">
+        <div class="nav-brand magic-hover">real_<span class="accent">heyokiaa</span></div>
+        <div class="nav-menu">
+            <a href="#hero" class="nav-item magic-hover">Init</a>
+            <a href="#roadmap" class="nav-item magic-hover">Roadmap</a>
+            <a href="#studio-ui" class="nav-item magic-hover">Studio_UI</a>
+            <a href="#contact" class="nav-item magic-hover">Sys_Req</a>
+        </div>
+        <div class="sys-status">
+            <div class="ping"></div>
+            SYS.ONLINE
+        </div>
     </nav>
 
-    <section id="home" class="hero">
-        <div class="hero-badge reveal-up custom-hover">
-            Roblox UI Designer & Scripter
-        </div>
-        <h1 class="hero-title reveal-up delay-100">Crafting Clean Interfaces.</h1>
-        
-        <div class="hero-subtitle reveal-up delay-200">
-            <span id="typewriter-text"></span><span class="type-cursor"></span>
-        </div>
-        
-        <div class="hero-scroll-indicator">
-            <div class="mouse-icon">
-                <div class="mouse-wheel"></div>
+    <header class="hero" id="hero">
+        <div class="hero-content" id="hero-content-3d">
+            <div class="hero-label magic-hover">ROBLOX UI & SYSTEMS DEV</div>
+            <div class="glitch-wrapper">
+                <h1 class="glitch-text" data-text="real_heyokiaa">real_heyokiaa</h1>
             </div>
-            <span>Scroll</span>
+            <p class="hero-sub sys-reveal">
+                Engineering fully scaled, zero-offset interfaces and logic systems within Roblox Studio. No placeholders.
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Sequence</span>
+            <div class="scroll-line"></div>
+        </div>
+    </header>
+
+    <section class="section-wrap" id="roadmap">
+        <div class="sec-header sys-reveal">
+            <div class="sec-num">01</div>
+            <h2 class="sec-title">Active Environment</h2>
+            <p class="sec-desc">Current development roadmap. Tracking logic architecture, game systems, and community management tools.</p>
+        </div>
+
+        <div class="roadmap-container">
+            <div class="roadmap-node sys-reveal magic-hover">
+                <div class="node-meta">
+                    <span>Project.Game // asymmetric_horror</span>
+                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> In Development</span>
+                </div>
+                <h3 class="node-title">Paradox</h3>
+                <p class="node-desc">Developing core game loops and mechanics for an asymmetric horror experience in Roblox. Focus on atmosphere and script efficiency.</p>
+                <div class="node-tags">
+                    <span class="sys-tag">LuaU</span>
+                    <span class="sys-tag">Core Logic</span>
+                    <span class="sys-tag">Game Design</span>
+                </div>
+            </div>
+
+            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 100ms;">
+                <div class="node-meta">
+                    <span>Project.Game // troll_action</span>
+                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> In Development</span>
+                </div>
+                <h3 class="node-title">Cat with Sword 1</h3>
+                <p class="node-desc">A highly kinetic joke/action game pitting a sword-wielding cat against gun-toting dogs. Built utilizing GML Visual logic flows.</p>
+                <div class="node-tags">
+                    <span class="sys-tag">GML Visual</span>
+                    <span class="sys-tag">Combat Systems</span>
+                </div>
+            </div>
+
+            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 200ms;">
+                <div class="node-meta">
+                    <span>Project.Game // fast_paced</span>
+                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> Scaling</span>
+                </div>
+                <h3 class="node-title">Slaughter Idol</h3>
+                <p class="node-desc">Team coordination and structural game design for a fast-paced Roblox title. Handling developer hiring and core loop mapping.</p>
+                <div class="node-tags">
+                    <span class="sys-tag">Project Management</span>
+                    <span class="sys-tag">Mechanics</span>
+                </div>
+            </div>
+
+            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 300ms;">
+                <div class="node-meta">
+                    <span>Project.Infra // discord_ops</span>
+                    <span class="node-status"><div class="ping"></div> Active</span>
+                </div>
+                <h3 class="node-title">LCTFD & Moon's Shop</h3>
+                <p class="node-desc">Operating complex Discord infrastructures including Liberty County Task Force (ERLC Internal Affairs) and a digital marketplace logic structure.</p>
+                <div class="node-tags">
+                    <span class="sys-tag">Community Admin</span>
+                    <span class="sys-tag">Bot Architecture</span>
+                    <span class="sys-tag">Marketplace</span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="portfolio" class="section-container">
-        
-        <div class="section-header reveal-up">
-            <h2 class="section-title">Studio UI Designs</h2>
-            <p class="section-desc">
-                A collection of my recent UI layout work constructed entirely within Roblox Studio. 
-                Focusing on flawless AspectRatio scaling, clean hierarchies, Kekui implementations, 
-                and responsive cross-device architecture. Featuring both high-fidelity mockups and active video interactions.
-            </p>
+    <section class="section-wrap" id="studio-ui">
+        <div class="sec-header sys-reveal">
+            <div class="sec-num">02</div>
+            <h2 class="sec-title">Studio UI Layouts</h2>
+            <p class="sec-desc">Strictly Roblox Studio implementations. Utilizing Kekui/AutoScale for responsive mathematical scaling (Scale > Offset). Zero external image dependencies shown here, purely procedural representations of layout structure.</p>
         </div>
 
-        <div class="gallery-filters reveal-up delay-100" id="filter-container">
-            <button class="filter-btn active custom-hover" data-filter="all">All Designs</button>
-            <button class="filter-btn custom-hover" data-filter="photo">Screenshots</button>
-            <button class="filter-btn custom-hover" data-filter="video">Video Interactions</button>
-            <button class="filter-btn custom-hover" data-filter="shop">Shop UIs</button>
-            <button class="filter-btn custom-hover" data-filter="hud">HUDs</button>
+        <div class="filter-sys sys-reveal" id="ui-filters">
+            <button class="filter-btn active magic-hover" data-filter="all">All.ui</button>
+            <button class="filter-btn magic-hover" data-filter="video">Interactions.mp4</button>
+            <button class="filter-btn magic-hover" data-filter="photo">Layouts.png</button>
+            <button class="filter-btn magic-hover" data-filter="shop">Shops.system</button>
         </div>
 
-        <div class="gallery-grid" id="gallery-grid">
+        <div class="gallery-grid" id="ui-grid">
             </div>
-
     </section>
 
-    <footer id="contact" class="footer">
-        <div class="footer-content reveal-up">
-            <div class="footer-logo">real_heyokiaa</div>
-            <p class="footer-text">
-                Specializing in Roblox UI/UX. Let's build something scalable. 
-                No Offset, only Scale.
+    <footer class="terminal-footer section-wrap" id="contact">
+        <div class="footer-info sys-reveal">
+            <div class="footer-brand">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--neon-primary)">
+                    <path d="M12 2L2 22h20L12 2zm0 6l5 10H7l5-10z"/>
+                </svg>
+                real_heyokiaa
+            </div>
+            <p style="color:var(--text-300); max-width:400px;">
+                Constructing scalable user interfaces and game logic in Roblox. Rejecting Offset, embracing Scale. System architecture built to last.
             </p>
             
-            <div class="social-links">
-                <a href="#" class="social-link custom-hover" aria-label="Roblox Profile">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M5.3 1.9L1.9 20.7l16.8 3.4L22.1 5.3 5.3 1.9zm8.5 12.8l-3.8-.8.8-3.8 3.8.8-.8 3.8z"/>
-                    </svg>
+            <div class="social-matrix">
+                <a href="#" class="soc-link magic-hover" aria-label="Roblox">
+                    <svg viewBox="0 0 24 24"><path d="M5.3 1.9L1.9 20.7l16.8 3.4L22.1 5.3 5.3 1.9zm8.5 12.8l-3.8-.8.8-3.8 3.8.8-.8 3.8z"/></svg>
                 </a>
-                <a href="#" class="social-link custom-hover" aria-label="Discord">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20.3 5.5c-1.6-.7-3.3-1.1-5.1-1.3-.2.4-.4.8-.6 1.3-2-.3-4-.3-6 0-.2-.5-.4-.9-.6-1.3-1.8.2-3.5.6-5.1 1.3C-.2 14.6-1 20 1.5 22.8c2.1 1.6 4.1 2.5 6.1 3.1.5-.7.9-1.4 1.3-2.1-1.1-.3-2.1-.8-3-1.4.2-.1.4-.3.6-.5 4.3 2 9.1 2 13.4 0 .2.2.4.4.6.5-.9.6-1.9 1-3 1.4.4.8.9 1.5 1.3 2.1 2-.6 4-1.5 6.1-3.1 2.8-3.3 1.6-9.6-3-17.3zm-11.6 12c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1 2.7-2.4 2.7zm6.6 0c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1.1 2.7-2.4 2.7z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-link custom-hover" aria-label="GitHub">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
+                <a href="#" class="soc-link magic-hover" aria-label="Discord">
+                    <svg viewBox="0 0 24 24"><path d="M20.3 5.5c-1.6-.7-3.3-1.1-5.1-1.3-.2.4-.4.8-.6 1.3-2-.3-4-.3-6 0-.2-.5-.4-.9-.6-1.3-1.8.2-3.5.6-5.1 1.3C-.2 14.6-1 20 1.5 22.8c2.1 1.6 4.1 2.5 6.1 3.1.5-.7.9-1.4 1.3-2.1-1.1-.3-2.1-.8-3-1.4.2-.1.4-.3.6-.5 4.3 2 9.1 2 13.4 0 .2.2.4.4.6.5-.9.6-1.9 1-3 1.4.4.8.9 1.5 1.3 2.1 2-.6 4-1.5 6.1-3.1 2.8-3.3 1.6-9.6-3-17.3zm-11.6 12c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1 2.7-2.4 2.7zm6.6 0c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1.1 2.7-2.4 2.7z"/></svg>
                 </a>
             </div>
-            
-            <div class="copyright">
-                &copy; <span id="year"></span> real_heyokiaa. Built for Roblox Development Portfolios.
+
+            <div class="copyright-line">
+                © <span id="sys-year"></span> real_heyokiaa. All subroutines secure.
+            </div>
+        </div>
+
+        <div class="terminal-ui sys-reveal">
+            <div class="term-header">
+                <div class="term-dots">
+                    <div class="term-dot td-r"></div>
+                    <div class="term-dot td-y"></div>
+                    <div class="term-dot td-g"></div>
+                </div>
+                <div class="term-title">contact.exe - sys.terminal</div>
+            </div>
+            <div class="term-body" id="term-output">
+                <div class="term-line">
+                    <span class="term-prompt">user@sys:~$</span><span class="term-cmd"> ping real_heyokiaa</span>
+                </div>
+                <div class="term-out">PING heyokiaa (127.0.0.1): 56 data bytes<br>64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.042 ms</div>
+                
+                <div class="term-line" style="margin-top:16px;">
+                    <span class="term-prompt">user@sys:~$</span><span class="term-cmd"> sys.info --roles</span>
+                </div>
+                <div class="term-out">["UI_Designer", "Roblox_Dev", "Scripter", "Video_Editor"]</div>
+                
+                <div class="term-input-line">
+                    <span class="term-prompt">user@sys:~$</span>
+                    <span style="color:var(--text-400)">_awaiting_input...</span>
+                    <span class="term-cursor"></span>
+                </div>
             </div>
         </div>
     </footer>
 
-    <div class="lightbox" id="lightbox">
-        
-        <button class="lightbox-btn btn-close custom-hover" id="lb-close" aria-label="Close Lightbox">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-
-        <button class="lightbox-btn btn-prev custom-hover" id="lb-prev" aria-label="Previous Item">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-        </button>
-
-        <button class="lightbox-btn btn-next custom-hover" id="lb-next" aria-label="Next Item">
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-        </button>
-
-        <div class="lightbox-content-wrapper">
-            <div class="lightbox-media" id="lb-media-container"></div>
-            
-            <div class="lightbox-details">
-                <h3 class="lightbox-title" id="lb-title">Project Title</h3>
-                <p id="lb-desc">Project Description goes here...</p>
+    <div id="lightbox-sys">
+        <div class="lb-container">
+            <div class="lb-header">
+                <div>
+                    <h3 class="lb-title" id="lb-title"></h3>
+                    <div class="lb-meta" id="lb-meta"></div>
+                </div>
+                <button class="lb-close magic-hover" id="lb-close">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
             </div>
+            <div class="lb-media-stage" id="lb-media">
+                </div>
+        </div>
+        <div class="lb-controls">
+            <button class="lb-btn magic-hover" id="lb-prev">
+                <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+            </button>
+            <button class="lb-btn magic-hover" id="lb-next">
+                <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </button>
         </div>
     </div>
 
     <script>
         /**
-         * ========================================================================
-         * 1. CORE UTILITIES & INITIALIZATION
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * I. SYSTEM BOOT SEQUENCE & LOADER
+         * ------------------------------------------------------------------------
          */
+        document.getElementById('sys-year').textContent = new Date().getFullYear();
+
+        const bootLogs = [
+            "Initializing memory matrix...",
+            "Loading Kekui auto-scale dependencies...",
+            "Resolving AspectRatioConstraints...",
+            "Bypassing UIGridLayout conflicts...",
+            "Mounting custom cursors...",
+            "Parsing real_heyokiaa profile...",
+            "System ready. Executing DOM."
+        ];
         
-        // Remove Loader on Window Load
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            loader.style.opacity = '0';
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500);
-            
-            // Set Copyright Year
-            document.getElementById('year').textContent = new Date().getFullYear();
-        });
+        const loaderContainer = document.getElementById('loader-logs-container');
+        const loaderFill = document.getElementById('loader-fill');
+        const sysLoader = document.getElementById('sys-loader');
+
+        let logIndex = 0;
+        let progress = 0;
+
+        function simulateBoot() {
+            if (logIndex < bootLogs.length) {
+                const log = document.createElement('div');
+                log.className = 'loader-log';
+                
+                // Add timestamp
+                const date = new Date();
+                const timeStr = `[${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}.${date.getMilliseconds().toString().padStart(3, '0')}]`;
+                
+                log.innerHTML = `<span class="timestamp">${timeStr}</span> <span class="msg">${bootLogs[logIndex]}</span>`;
+                loaderContainer.appendChild(log);
+                
+                progress += (100 / bootLogs.length);
+                loaderFill.style.width = `${progress}%`;
+                
+                logIndex++;
+                setTimeout(simulateBoot, Math.random() * 150 + 50);
+            } else {
+                setTimeout(() => {
+                    sysLoader.classList.add('boot-complete');
+                    document.body.style.overflow = 'auto'; // allow scroll
+                    initScrollReveals(); // trigger reveals
+                }, 400);
+            }
+        }
+        
+        // Lock scroll during boot
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('load', () => setTimeout(simulateBoot, 200));
 
         /**
-         * ========================================================================
-         * 2. CUSTOM CURSOR LOGIC
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * II. MAGNETIC CUSTOM CURSOR ENGINE
+         * ------------------------------------------------------------------------
          */
-        const cursorDot = document.getElementById('custom-cursor-dot');
-        const cursorRing = document.getElementById('custom-cursor-ring');
+        const curCore = document.getElementById('cursor-core');
+        const curRing = document.getElementById('cursor-ring');
         
-        // Track mouse position
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let ringX = mouseX;
         let ringY = mouseY;
+        
+        // Touch device detection
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-        // Update coordinates on move
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        // Animation loop for smooth trailing ring
-        function animateCursor() {
-            // Instant dot follow
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
-            
-            // Lerp ring follow
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            cursorRing.style.left = `${ringX}px`;
-            cursorRing.style.top = `${ringY}px`;
-            
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Add hover effects to interactable elements
-        const setupCursorHoverEvents = () => {
-            const hoverElements = document.querySelectorAll('a, button, .custom-hover, .gallery-item');
-            hoverElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    document.body.classList.add('cursor-hover');
-                });
-                el.addEventListener('mouseleave', () => {
-                    document.body.classList.remove('cursor-hover');
-                });
+        if (!isTouch) {
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                // Instant follow for core
+                curCore.style.left = `${mouseX}px`;
+                curCore.style.top = `${mouseY}px`;
             });
-        };
+
+            // Smooth follow for ring
+            function animateCursor() {
+                ringX += (mouseX - ringX) * 0.2;
+                ringY += (mouseY - ringY) * 0.2;
+                curRing.style.left = `${ringX}px`;
+                curRing.style.top = `${ringY}px`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Magnetic logic for interactive elements
+            const setupMagneticHover = () => {
+                document.querySelectorAll('.magic-hover, a, button').forEach(el => {
+                    // Prevent duplicate listeners
+                    if(el.dataset.magInit) return;
+                    el.dataset.magInit = true;
+
+                    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-magnetic'));
+                    el.addEventListener('mouseleave', () => {
+                        document.body.classList.remove('cursor-magnetic');
+                        curRing.style.transform = `translate(-50%, -50%)`; // reset
+                    });
+                    
+                    // Simple magnetic pull
+                    el.addEventListener('mousemove', (e) => {
+                        const rect = el.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        
+                        // Move element slightly
+                        el.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+                        // Snap ring to element center
+                        ringX = rect.left + rect.width / 2;
+                        ringY = rect.top + rect.height / 2;
+                    });
+                    
+                    el.addEventListener('mouseleave', () => {
+                        el.style.transform = `translate(0px, 0px)`;
+                    });
+                });
+            };
+            setupMagneticHover(); // Initial run
+        }
 
         /**
-         * ========================================================================
-         * 3. PARTICLE ENGINE (HTML5 CANVAS)
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * III. HTML5 CANVAS BACKGROUND (INTERACTIVE DATA NODES)
+         * ------------------------------------------------------------------------
          */
-        const canvas = document.getElementById('particle-canvas');
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        let particlesArray = [];
+        let nodes = [];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -1130,503 +1382,306 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        class Particle {
+        class SysNode {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() * 1) - 0.5;
-                this.speedY = (Math.random() * 1) - 0.5;
-                this.color = 'rgba(59, 130, 246, 0.4)'; // Primary color with opacity
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 1.5 + 0.5;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                
-                // Bounce off edges
-                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
-                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
                 ctx.fill();
             }
         }
 
-        function initParticles() {
-            particlesArray = [];
-            // Number of particles depends on screen size to maintain performance
-            let numberOfParticles = (canvas.width * canvas.height) / 15000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
+        function initNodes() {
+            nodes = [];
+            const count = Math.floor((canvas.width * canvas.height) / 25000); // density
+            for (let i = 0; i < count; i++) nodes.push(new SysNode());
         }
 
-        function animateParticles() {
+        function animateNodes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                nodes[i].draw();
+
+                // Connect to cursor
+                const dxMouse = mouseX - nodes[i].x;
+                const dyMouse = mouseY - nodes[i].y;
+                const distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
                 
-                // Connect particles with lines if close
-                for (let j = i; j < particlesArray.length; j++) {
-                    const dx = particlesArray[i].x - particlesArray[j].x;
-                    const dy = particlesArray[i].y - particlesArray[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 100) {
+                if (distMouse < 150 && !isTouch) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 - distMouse/150})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // Connect to other nodes
+                for (let j = i; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 100) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 - distance/1000})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(100, 100, 150, ${0.1 - dist/1000})`;
                         ctx.stroke();
                     }
                 }
             }
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animateNodes);
         }
-
-        initParticles();
-        animateParticles();
+        initNodes();
+        animateNodes();
 
         /**
-         * ========================================================================
-         * 4. NAVBAR SCROLL LOGIC
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * IV. PARALLAX & SCROLL LOGIC
+         * ------------------------------------------------------------------------
          */
-        let lastScrollTop = 0;
-        const navbar = document.getElementById('navbar');
+        // 3D Mouse Parallax for Hero
+        const heroContent = document.getElementById('hero-content-3d');
+        if (!isTouch) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth / 2 - e.pageX) / 40;
+                const y = (window.innerHeight / 2 - e.pageY) / 40;
+                heroContent.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            });
+        }
 
+        // Navbar hide on scroll down
+        const sysNav = document.getElementById('sys-nav');
+        let lastScroll = 0;
         window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scroll Down -> Hide
-                navbar.classList.add('hidden');
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                sysNav.classList.add('hide');
             } else {
-                // Scroll Up -> Show
-                navbar.classList.remove('hidden');
+                sysNav.classList.remove('hide');
             }
-            // Add background opacity change based on scroll
-            if(scrollTop > 50) {
-                navbar.style.backgroundColor = 'rgba(10, 10, 12, 0.95)';
-                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
-            } else {
-                navbar.style.backgroundColor = 'rgba(10, 10, 12, 0.5)';
-                navbar.style.boxShadow = 'none';
-            }
-            lastScrollTop = scrollTop;
+            lastScroll = currentScroll;
         });
 
-        /**
-         * ========================================================================
-         * 5. TYPEWRITER EFFECT
-         * ========================================================================
-         */
-        const typewriterElement = document.getElementById('typewriter-text');
-        const textArray = [
-            "Scaling UIs with Kekui.",
-            "Building modular Shop systems.",
-            "Designing responsive HUDs.",
-            "Perfecting AspectRatios."
-        ];
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingDelay = 100;
-
-        function typeWriter() {
-            const currentText = textArray[textIndex];
-            
-            if (isDeleting) {
-                // Remove char
-                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-                typingDelay = 50; // Faster delete
-            } else {
-                // Add char
-                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-                typingDelay = 100;
-            }
-
-            // Word completed
-            if (!isDeleting && charIndex === currentText.length) {
-                typingDelay = 2000; // Pause at end of word
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                textIndex = (textIndex + 1) % textArray.length; // Next word
-                typingDelay = 500; // Pause before typing next word
-            }
-
-            setTimeout(typeWriter, typingDelay);
-        }
-        
-        setTimeout(typeWriter, 1000); // Start after 1s
-
-        /**
-         * ========================================================================
-         * 6. SCROLL REVEAL (INTERSECTION OBSERVER)
-         * ========================================================================
-         */
-        const revealOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const revealObserver = new IntersectionObserver(function(entries, observer) {
+        // Intersection Observer for Scroll Reveals
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const revealObserver = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Reveal only once
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    obs.unobserve(entry.target);
+                }
             });
         }, revealOptions);
 
         function initScrollReveals() {
-            document.querySelectorAll('.reveal-up').forEach(el => {
-                revealObserver.observe(el);
-            });
+            document.querySelectorAll('.sys-reveal').forEach(el => revealObserver.observe(el));
         }
 
         /**
-         * ========================================================================
-         * 7. DYNAMIC GALLERY DATA GENERATION & INJECTION
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * V. STUDIO UI GALLERY DATA & 3D TILT RENDERER
+         * ------------------------------------------------------------------------
          */
-        // We use a large data array to mock out an extensive portfolio.
-        // Replace placeholders with real assets in production.
-        const galleryData = [
+        const uiData = [
             {
-                id: 1,
-                title: "Premium Simulator Shop",
-                desc: "A fully scaled store UI. Built with AutoScale/Kekui for zero offset issues. Features scrolling frames and dynamic item grids.",
-                type: "photo", // photo or video
-                category: "shop",
-                src: "https://via.placeholder.com/800x600/161b22/3b82f6?text=Shop+UI+Screenshot", // Placeholder for actual image
-                tags: ["Kekui", "Grid Layout", "Scale Only"]
+                id: 1, type: 'shop', format: 'photo', title: 'Simulator Store Core',
+                tech: 'Kekui AutoScale • UIGridLayout',
+                desc: 'A procedural recreation of a simulator shop UI. Converted fully to Scale values to prevent mobile overflow.',
+                bgClass: 'media-bg-1'
             },
             {
-                id: 2,
-                title: "Inventory System Drag/Drop",
-                desc: "Demonstration of a working UI inventory system. Custom scripts handle dropping items into scaled slots.",
-                type: "video",
-                category: "hud",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4", // Placeholder for actual mp4
-                tags: ["Scripting", "Interaction", "HUD"]
+                id: 2, type: 'hud', format: 'video', title: 'Inventory Drag Node',
+                tech: 'UserInputService • AbsolutePosition',
+                desc: 'Interactive visual showing the logic flow of dragging an item slot. Math applied to retain UIAspectRatioConstraint during drag.',
+                bgClass: 'media-bg-2'
             },
             {
-                id: 3,
-                title: "Main Menu Selection",
-                desc: "Clean, dark-mode inspired main menu with animated play buttons and settings panels.",
-                type: "photo",
-                category: "hud",
-                src: "https://via.placeholder.com/800x600/161b22/10b981?text=Main+Menu+UI",
-                tags: ["Main Menu", "Design", "Frames"]
+                id: 3, type: 'shop', format: 'photo', title: 'Daily Rewards Modal',
+                tech: 'AnchorPoint 0.5 • UIStroke',
+                desc: 'Center-anchored popup layout. Perfect aspect ratio maintained across all device emulations in Studio.',
+                bgClass: 'media-bg-3'
             },
             {
-                id: 4,
-                title: "Daily Rewards Pop-up",
-                desc: "A center-anchored UI popup for claiming daily rewards. Uses UIAspectRatioConstraint for perfect mobile viewing.",
-                type: "photo",
-                category: "shop",
-                src: "https://via.placeholder.com/800x600/161b22/8b5cf6?text=Rewards+UI",
-                tags: ["Popup", "Mobile Ready"]
+                id: 4, type: 'hud', format: 'video', title: 'Trading System UX',
+                tech: 'TweenService • LocalScript',
+                desc: 'Recording of the lock/accept visual feedback loop in a two-player trading window.',
+                bgClass: 'media-bg-4'
             },
             {
-                id: 5,
-                title: "Trading Hub Interface",
-                desc: "Live recording of the two-player trading window UI in action, showing lock/accept animations.",
-                type: "video",
-                category: "hud",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4",
-                tags: ["Trading", "TweenService"]
+                id: 5, type: 'hud', format: 'photo', title: 'Settings Panel Config',
+                tech: 'UIListLayout • CanvasSize',
+                desc: 'Scrollable container setup ensuring content fits dynamically without breaking the outer frame bounds.',
+                bgClass: 'media-bg-1'
             },
             {
-                id: 6,
-                title: "In-Game Currency Purchase",
-                desc: "A sleek DevProduct prompt layout built manually in Studio. Gradient backgrounds and UIStrokes.",
-                type: "photo",
-                category: "shop",
-                src: "https://via.placeholder.com/800x600/161b22/f59e0b?text=Robux+Shop",
-                tags: ["Monetization", "Gradients"]
-            },
-            // Replicating data to simulate a large portfolio for demonstration
-            {
-                id: 7,
-                title: "Settings Configuration Menu",
-                desc: "A scrollable list layout for audio, graphics, and gameplay settings.",
-                type: "photo",
-                category: "hud",
-                src: "https://via.placeholder.com/800x600/161b22/ec4899?text=Settings+Menu",
-                tags: ["ListLayout", "Settings"]
-            },
-            {
-                id: 8,
-                title: "Leaderboard Custom UI",
-                desc: "Custom player list replacing the core Roblox leaderboard. Clean and unobtrusive.",
-                type: "photo",
-                category: "hud",
-                src: "https://via.placeholder.com/800x600/161b22/ef4444?text=Custom+Leaderboard",
-                tags: ["HUD", "CoreGui"]
-            },
-            {
-                id: 9,
-                title: "Gacha Spin Wheel Animation",
-                desc: "Video showing the UI spinning mechanic with easing styles applied to the rotation property.",
-                type: "video",
-                category: "shop",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4",
-                tags: ["Animation", "Gacha"]
-            },
-            {
-                id: 10,
-                title: "Quest Log Tracker",
-                desc: "A side-anchored HUD element that tracks player progress dynamically.",
-                type: "photo",
-                category: "hud",
-                src: "https://via.placeholder.com/800x600/161b22/06b6d4?text=Quest+Tracker",
-                tags: ["Tracking", "Side HUD"]
-            },
-            {
-                id: 11,
-                title: "Weapon Loadout Screen",
-                desc: "Grid-based selection for equipping gear before a match starts.",
-                type: "photo",
-                category: "hud",
-                src: "https://via.placeholder.com/800x600/161b22/6366f1?text=Loadout+UI",
-                tags: ["Selection", "Arsenal"]
-            },
-            {
-                id: 12,
-                title: "Vehicle Dealership Layout",
-                desc: "A shop specifically designed to showcase 3D viewport frames inside 2D UI.",
-                type: "video",
-                category: "shop",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4",
-                tags: ["ViewportFrame", "Shop"]
+                id: 6, type: 'shop', format: 'video', title: 'Gacha Spin Mechanic',
+                tech: 'Rotation • EasingStyles',
+                desc: 'Wheel layout relying on strict AnchorPoints to ensure rotation happens from the exact geometric center.',
+                bgClass: 'media-bg-2'
             }
         ];
 
-        const galleryGrid = document.getElementById('gallery-grid');
+        const gridEl = document.getElementById('ui-grid');
+        const filters = document.querySelectorAll('.filter-btn');
 
-        // Render function
+        // SVG Icons
+        const iconVid = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconPic = `<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
+
         function renderGallery(filter = 'all') {
-            // Clear current grid
-            galleryGrid.innerHTML = '';
+            gridEl.innerHTML = '';
             
-            // Filter data
-            const filteredData = filter === 'all' 
-                ? galleryData 
-                : galleryData.filter(item => item.type === filter || item.category === filter);
+            const filtered = filter === 'all' ? uiData : uiData.filter(d => d.type === filter || d.format === filter);
 
-            // Generate HTML
-            filteredData.forEach((item, index) => {
+            filtered.forEach((item, i) => {
+                const delay = ((i % 3) * 100) + 'ms';
+                const icon = item.format === 'video' ? iconVid : iconPic;
                 
-                // SVG Icons based on media type
-                const photoIcon = `<svg class="play-icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
-                const videoIcon = `<svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-                const mediaBadge = item.type === 'video' ? `${videoIcon} Video` : `${photoIcon} Photo`;
-
-                // Calculate stagger delay based on index for animation
-                const delayClass = `delay-${((index % 5) + 1) * 100}`;
-
-                // Create Card Element
-                const card = document.createElement('div');
-                card.className = `gallery-item reveal-up ${delayClass}`;
-                card.setAttribute('data-id', item.id);
-                
-                // Construct HTML String
-                card.innerHTML = `
-                    <div class="item-thumbnail">
-                        <div class="media-badge">${mediaBadge}</div>
-                        ${item.type === 'video' 
-                            ? `<video src="${item.src}" muted loop playsinline></video>` 
-                            : `<img src="${item.src}" loading="lazy" alt="${item.title}">`
-                        }
-                        <div class="item-overlay">
-                            <button class="btn-expand" aria-label="Expand">
-                                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="item-info">
-                        <h3 class="item-title">${item.title}</h3>
-                        <p class="item-desc">${item.desc}</p>
-                        <div class="item-tags">
-                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                // Procedural wireframe structure
+                const wireframeHTML = `
+                    <div class="wireframe-ui">
+                        <div class="wire-header"></div>
+                        <div class="wire-grid">
+                            <div class="wire-box"></div><div class="wire-box alt"></div>
+                            <div class="wire-box alt"></div><div class="wire-box"></div>
                         </div>
                     </div>
                 `;
 
-                // Add Click Event to open Lightbox
-                card.addEventListener('click', () => openLightbox(item.id));
-                
-                // For videos, play on hover
-                if(item.type === 'video') {
-                    const vidElement = card.querySelector('video');
-                    card.addEventListener('mouseenter', () => vidElement.play().catch(e => console.log(e)));
+                const card = document.createElement('div');
+                card.className = `ui-card sys-reveal magic-hover`;
+                card.style.transitionDelay = delay;
+                card.innerHTML = `
+                    <div class="card-media ${item.bgClass}">
+                        <div class="media-type-icon">${icon} ${item.format.toUpperCase()}</div>
+                        ${wireframeHTML}
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">${item.title}</h3>
+                        <div class="card-tech">${item.tech}</div>
+                        <p class="card-desc">${item.desc}</p>
+                        <div class="card-action">View Logic Sequence <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
+                    </div>
+                `;
+
+                // 3D Tilt Logic
+                if (!isTouch) {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left; // x position within the element.
+                        const y = e.clientY - rect.top;  // y position within the element.
+                        
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        
+                        const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+                        const rotateY = ((x - centerX) / centerX) * 10;
+                        
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    });
+                    
                     card.addEventListener('mouseleave', () => {
-                        vidElement.pause();
-                        vidElement.currentTime = 0;
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
                     });
                 }
 
-                galleryGrid.appendChild(card);
+                // Open Lightbox Event
+                card.addEventListener('click', () => openLightbox(item, filtered));
+                gridEl.appendChild(card);
             });
-
-            // Re-initialize intersection observers for new elements
-            initScrollReveals();
-            setupCursorHoverEvents(); // Re-bind custom cursor
+            
+            // Re-init reveals & cursor tracking for new DOM elements
+            setTimeout(() => {
+                initScrollReveals();
+                if(typeof setupMagneticHover === 'function') setupMagneticHover();
+            }, 50);
         }
 
-        // Initial Render
-        renderGallery();
-
-        /**
-         * ========================================================================
-         * 8. FILTERING LOGIC
-         * ========================================================================
-         */
-        const filterContainer = document.getElementById('filter-container');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-
-        filterContainer.addEventListener('click', (e) => {
-            if(e.target.classList.contains('filter-btn')) {
-                // Remove active class from all
-                filterBtns.forEach(btn => btn.classList.remove('active'));
-                // Add to clicked
+        // Filtering bindings
+        filters.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filters.forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                
-                // Get filter value and render
-                const filterValue = e.target.getAttribute('data-filter');
-                renderGallery(filterValue);
-            }
+                renderGallery(e.target.dataset.filter);
+            });
         });
 
+        renderGallery(); // Initial render
+
         /**
-         * ========================================================================
-         * 9. LIGHTBOX (MODAL) LOGIC
-         * ========================================================================
+         * ------------------------------------------------------------------------
+         * VI. LIGHTBOX (MODAL) SYSTEM
+         * ------------------------------------------------------------------------
          */
-        const lightbox = document.getElementById('lightbox');
-        const lbMediaContainer = document.getElementById('lb-media-container');
+        const lbSys = document.getElementById('lightbox-sys');
         const lbTitle = document.getElementById('lb-title');
-        const lbDesc = document.getElementById('lb-desc');
-        const btnClose = document.getElementById('lb-close');
-        const btnPrev = document.getElementById('lb-prev');
-        const btnNext = document.getElementById('lb-next');
+        const lbMeta = document.getElementById('lb-meta');
+        const lbMedia = document.getElementById('lb-media');
+        
+        let currentLbSet = [];
+        let currentLbIndex = 0;
 
-        let currentActiveId = null;
-        let currentFilteredData = [];
-
-        function updateLightboxData(item) {
-            // Clear current media
-            lbMediaContainer.innerHTML = '';
-            
-            if(item.type === 'photo') {
-                const img = document.createElement('img');
-                img.src = item.src;
-                img.alt = item.title;
-                lbMediaContainer.appendChild(img);
-            } else if (item.type === 'video') {
-                const vid = document.createElement('video');
-                vid.src = item.src;
-                vid.controls = true;
-                vid.autoplay = true;
-                vid.loop = true;
-                lbMediaContainer.appendChild(vid);
-            }
-
+        function updateLightboxUI() {
+            const item = currentLbSet[currentLbIndex];
             lbTitle.textContent = item.title;
-            lbDesc.textContent = item.desc;
+            lbMeta.textContent = `sys_data // ${item.tech}`;
+            
+            // Re-inject wireframe as placeholder
+            lbMedia.className = `lb-media-stage ${item.bgClass}`;
+            lbMedia.innerHTML = `
+                <div class="wireframe-ui">
+                    <div class="wire-header"></div>
+                    <div class="wire-grid">
+                        <div class="wire-box"></div><div class="wire-box alt"></div>
+                        <div class="wire-box alt"></div><div class="wire-box"></div>
+                    </div>
+                </div>
+            `;
         }
 
-        function openLightbox(id) {
-            // Determine current active filter to map prev/next correctly
-            const activeFilterBtn = document.querySelector('.filter-btn.active');
-            const filterValue = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
-            
-            currentFilteredData = filterValue === 'all' 
-                ? galleryData 
-                : galleryData.filter(i => i.type === filterValue || i.category === filterValue);
-            
-            currentActiveId = id;
-            const item = currentFilteredData.find(i => i.id === id);
-            
-            if(item) {
-                updateLightboxData(item);
-                lightbox.classList.add('active');
-                document.body.classList.add('no-scroll'); // Prevent background scrolling
-            }
+        function openLightbox(item, dataset) {
+            currentLbSet = dataset;
+            currentLbIndex = dataset.findIndex(d => d.id === item.id);
+            updateLightboxUI();
+            lbSys.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
-            lightbox.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-            
-            // Stop video playing in background
-            const video = lbMediaContainer.querySelector('video');
-            if(video) {
-                video.pause();
-                video.removeAttribute('src'); 
-                video.load();
-            }
-            // slight delay before clearing to allow fade out animation
-            setTimeout(() => {
-                lbMediaContainer.innerHTML = '';
-            }, 300);
+            lbSys.classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
 
-        function navigateLightbox(direction) {
-            if(!currentFilteredData.length) return;
-            
-            const currentIndex = currentFilteredData.findIndex(i => i.id === currentActiveId);
-            let nextIndex;
-
-            if (direction === 'next') {
-                nextIndex = currentIndex === currentFilteredData.length - 1 ? 0 : currentIndex + 1;
-            } else {
-                nextIndex = currentIndex === 0 ? currentFilteredData.length - 1 : currentIndex - 1;
-            }
-
-            const nextItem = currentFilteredData[nextIndex];
-            currentActiveId = nextItem.id;
-            updateLightboxData(nextItem);
-        }
-
-        // Lightbox Event Listeners
-        btnClose.addEventListener('click', closeLightbox);
-        btnNext.addEventListener('click', () => navigateLightbox('next'));
-        btnPrev.addEventListener('click', () => navigateLightbox('prev'));
+        document.getElementById('lb-close').addEventListener('click', closeLightbox);
+        
+        document.getElementById('lb-next').addEventListener('click', () => {
+            currentLbIndex = (currentLbIndex + 1) % currentLbSet.length;
+            updateLightboxUI();
+        });
+        
+        document.getElementById('lb-prev').addEventListener('click', () => {
+            currentLbIndex = (currentLbIndex - 1 + currentLbSet.length) % currentLbSet.length;
+            updateLightboxUI();
+        });
 
         // Close on background click
-        lightbox.addEventListener('click', (e) => {
-            if(e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
-                closeLightbox();
-            }
+        lbSys.addEventListener('click', (e) => {
+            if (e.target === lbSys) closeLightbox();
         });
-
-        // Keyboard Navigation
-        window.addEventListener('keydown', (e) => {
-            if(!lightbox.classList.contains('active')) return;
-            
-            if(e.key === 'Escape') closeLightbox();
-            if(e.key === 'ArrowRight') navigateLightbox('next');
-            if(e.key === 'ArrowLeft') navigateLightbox('prev');
-        });
-
-        /**
-         * ========================================================================
-         * 10. FINAL INITIALIZATIONS
-         * ========================================================================
-         */
-        // Ensure reveal observers are active on start
-        initScrollReveals();
-        // Setup custom cursors on statically loaded elements
-        setupCursorHoverEvents();
 
     </script>
 </body>

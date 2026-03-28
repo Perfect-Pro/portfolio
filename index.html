@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Real_heyokiaa - Roblox UI Designer and Developer Portfolio. Showcasing Studio UI, layout scaling, and interactive elements.">
+    <meta name="keywords" content="Roblox, UI Design, Kekui, AutoScale, Developer, Portfolio, Real_heyokiaa, Studio">
+    <meta name="author" content="Real_heyokiaa">
+    
+    <title>Real_heyokiaa | UI Design Portfolio</title>
+
+    <style>
+        /* ---------------------------------------- */
+        /* 1. CSS VARIABLES & THEME CONFIGURATION   */
+        /* ---------------------------------------- */
+        :root {
+            /* Color Palette - Dark Mode UI Vibe */
+            --color-bg-base: #0a0a0c;
+            --color-bg-surface: #141418;
+            --color-bg-surface-light: #1e1e24;
+            
+            --color-primary: #3b82f6; /* Roblox Blue Accent */
+            --color-primary-glow: rgba(59, 130, 246, 0.4);
+            --color-secondary: #8b5cf6; /* Purple Accent */
+            --color-accent: #10b981; /* Success Green */
+            
+            --color-text-main: #f3f4f6;
+            --color-text-muted: #9ca3af;
+            --color-text-dark: #1f2937;
+            
+            --color-border: #2dd4bf; /* Teal UI border */
+            --color-border-subtle: #374151;
+
+            /* Typography */
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-family-mono: "Fira Code", "Courier New", Courier, monospace;
+            
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+            --font-size-6xl: 4rem;
+
+            /* Spacing Metrics */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            --space-32: 8rem;
+
+            /* Border Radius */
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+
+            /* Shadows & Depth */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 20px var(--color-primary-glow);
+
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+            /* Z-Index Layers */
+            --z-behind: -1;
+            --z-normal: 1;
+            --z-elevated: 10;
+            --z-nav: 50;
+            --z-modal: 100;
+            --z-cursor: 9999;
+        }
+
+        /* ---------------------------------------- */
+        /* 2. CSS RESET & GLOBAL STYLES             */
+        /* ---------------------------------------- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background-color: var(--color-bg-base);
+            color: var(--color-text-main);
+            font-family: var(--font-family-sans);
+            line-height: 1.5;
+            overflow-x: hidden;
+            width: 100vw;
+            min-height: 100vh;
+            /* Hide default cursor for custom cursor */
+            cursor: none; 
+        }
+
+        /* Links & Buttons Reset */
+        a {
+            color: inherit;
+            text-decoration: none;
+            cursor: none; /* Inherit custom cursor */
+        }
+
+        button {
+            background: none;
+            border: none;
+            cursor: none;
+            font-family: inherit;
+            color: inherit;
+            outline: none;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Typography Tags */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-text-main);
+        }
+
+        p {
+            margin-bottom: var(--space-4);
+        }
+
+        /* ---------------------------------------- */
+        /* 3. CUSTOM CURSOR                         */
+        /* ---------------------------------------- */
+        #custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-primary);
+            border-radius: var(--radius-full);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: var(--z-cursor);
+            transition: width var(--transition-fast), height var(--transition-fast), background-color var(--transition-fast);
+        }
+
+        #custom-cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-full);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: var(--z-cursor);
+            transition: transform 0.1s ease-out, width var(--transition-fast), height var(--transition-fast), border-color var(--transition-fast);
+        }
+
+        /* Cursor Hover States applied via JS classes */
+        .cursor-hover #custom-cursor-dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--color-accent);
+        }
+
+        .cursor-hover #custom-cursor-ring {
+            width: 60px;
+            height: 60px;
+            border-color: var(--color-accent);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        /* ---------------------------------------- */
+        /* 4. BACKGROUND CANVAS (PARTICLES)         */
+        /* ---------------------------------------- */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: var(--z-behind);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* ---------------------------------------- */
+        /* 5. NAVIGATION BAR                        */
+        /* ---------------------------------------- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 var(--space-8);
+            background-color: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border-subtle);
+            z-index: var(--z-nav);
+            transition: transform var(--transition-normal);
+        }
+
+        .navbar.hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav-logo {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--color-text-main);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .nav-logo span {
+            color: var(--color-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-6);
+        }
+
+        .nav-link {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-text-muted);
+            transition: color var(--transition-fast);
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--color-primary);
+            transition: width var(--transition-normal);
+        }
+
+        .nav-link:hover {
+            color: var(--color-text-main);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ---------------------------------------- */
+        /* 6. HERO SECTION                          */
+        /* ---------------------------------------- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-8);
+            text-align: center;
+            z-index: var(--z-normal);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-2) var(--space-4);
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--color-primary-glow);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            color: var(--color-primary);
+            margin-bottom: var(--space-6);
+            animation: pulse-border 2s infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: var(--space-6);
+            background: linear-gradient(135deg, #ffffff 0%, #9ca3af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin-bottom: var(--space-10);
+            height: 40px; /* fixed height for typewriter */
+        }
+
+        /* Typewriter Cursor */
+        .type-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--color-primary);
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: var(--space-10);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .mouse-icon {
+            width: 24px;
+            height: 36px;
+            border: 2px solid var(--color-text-muted);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .mouse-wheel {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+            animation: scroll-wheel 2s infinite;
+        }
+
+        /* ---------------------------------------- */
+        /* 7. SECTION HEADERS                       */
+        /* ---------------------------------------- */
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-24) var(--space-8);
+            position: relative;
+            z-index: var(--z-normal);
+        }
+
+        .section-header {
+            margin-bottom: var(--space-16);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .section-title {
+            font-size: var(--font-size-4xl);
+            position: relative;
+            display: inline-block;
+            margin-bottom: var(--space-4);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .section-desc {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-lg);
+            max-width: 800px;
+        }
+
+        /* ---------------------------------------- */
+        /* 8. UI GALLERY GRID SYSTEM                */
+        /* ---------------------------------------- */
+        /* Filtering Controls */
+        .gallery-filters {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-10);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: var(--space-2) var(--space-6);
+            background-color: var(--color-bg-surface);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-full);
+            color: var(--color-text-muted);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-normal);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-text-main);
+        }
+
+        .filter-btn.active {
+            background-color: var(--color-primary);
+            color: #fff;
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* The Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-gap: var(--space-8);
+            width: 100%;
+        }
+
+        /* Gallery Item Card */
+        .gallery-item {
+            background-color: var(--color-bg-surface);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            position: relative;
+            transition: transform var(--transition-bounce), border-color var(--transition-normal), box-shadow var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+        }
+
+        /* Thumbnail Container */
+        .item-thumbnail {
+            width: 100%;
+            height: 240px;
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .item-thumbnail img,
+        .item-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+
+        .gallery-item:hover .item-thumbnail img,
+        .gallery-item:hover .item-thumbnail video {
+            transform: scale(1.05);
+        }
+
+        /* Overlay on Hover */
+        .item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--space-4);
+        }
+
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        /* Media Type Badge (Photo vs Video) */
+        .media-badge {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 2;
+        }
+
+        /* Play button icon for video thumbnails */
+        .play-icon {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        /* Info Section below thumbnail */
+        .item-info {
+            padding: var(--space-5);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-title {
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-text-main);
+            font-weight: 700;
+        }
+
+        .item-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-4);
+            flex-grow: 1;
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            margin-top: auto;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            background-color: var(--color-bg-surface-light);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Expand Button */
+        .btn-expand {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-primary);
+            border-radius: var(--radius-full);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all var(--transition-bounce);
+            box-shadow: var(--shadow-glow);
+            z-index: 3;
+        }
+
+        .btn-expand svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .gallery-item:hover .btn-expand {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ---------------------------------------- */
+        /* 9. LIGHTBOX MODAL SYSTEM                 */
+        /* ---------------------------------------- */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: var(--z-modal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-normal), visibility var(--transition-normal);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0.95);
+            transition: transform var(--transition-bounce);
+        }
+
+        .lightbox.active .lightbox-content-wrapper {
+            transform: scale(1);
+        }
+
+        .lightbox-media {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .lightbox-media img,
+        .lightbox-media video {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--color-border-subtle);
+        }
+
+        .lightbox-details {
+            margin-top: var(--space-6);
+            text-align: center;
+            color: #fff;
+            background: var(--color-bg-surface);
+            padding: var(--space-4) var(--space-8);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-subtle);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .lightbox-title {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-primary);
+        }
+
+        /* Lightbox Controls */
+        .lightbox-btn {
+            position: absolute;
+            background: rgba(30, 30, 36, 0.8);
+            border: 1px solid var(--color-border-subtle);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-full);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all var(--transition-fast);
+            z-index: calc(var(--z-modal) + 1);
+        }
+
+        .lightbox-btn:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .lightbox-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .btn-close {
+            top: var(--space-6);
+            right: var(--space-6);
+            position: fixed;
+        }
+
+        .btn-prev {
+            left: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn-next {
+            right: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn-prev:hover, .btn-next:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* ---------------------------------------- */
+        /* 10. SCROLL REVEAL ANIMATIONS             */
+        /* ---------------------------------------- */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
+
+        .reveal-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered delays for grid items */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+
+        /* ---------------------------------------- */
+        /* 11. FOOTER                               */
+        /* ---------------------------------------- */
+        .footer {
+            border-top: 1px solid var(--color-border-subtle);
+            background-color: var(--color-bg-surface);
+            padding: var(--space-12) var(--space-8);
+            text-align: center;
+            position: relative;
+            z-index: var(--z-normal);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-6);
+        }
+
+        .footer-logo {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+        }
+
+        .footer-text {
+            color: var(--color-text-muted);
+            max-width: 500px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background-color: var(--color-bg-surface-light);
+            border: 1px solid var(--color-border-subtle);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all var(--transition-fast);
+        }
+
+        .social-link:hover {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .copyright {
+            margin-top: var(--space-8);
+            padding-top: var(--space-4);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+        }
+
+        /* ---------------------------------------- */
+        /* 12. KEYFRAME ANIMATIONS                  */
+        /* ---------------------------------------- */
+        @keyframes pulse-border {
+            0% { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { border-color: rgba(59, 130, 246, 0.8); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
+        }
+
+        @keyframes scroll-wheel {
+            0% { transform: translate(-50%, 0); opacity: 1; }
+            100% { transform: translate(-50%, 15px); opacity: 0; }
+        }
+
+        /* ---------------------------------------- */
+        /* 13. MEDIA QUERIES (RESPONSIVE)           */
+        /* ---------------------------------------- */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .section-title { font-size: 2.5rem; }
+            .nav-links { display: none; /* Hide on mobile for simplicity in this template */ }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lightbox-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .btn-prev { left: 10px; }
+            .btn-next { right: 10px; }
+            .btn-close { top: 10px; right: 10px; }
+        }
+
+        /* Utility Classes for JS Manipulation */
+        .hidden-element { display: none !important; }
+        .no-scroll { overflow: hidden !important; }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--color-bg-base);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="custom-cursor-dot"></div>
+    <div id="custom-cursor-ring"></div>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo">Real_<span>heyokiaa</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link custom-hover">Home</a></li>
+            <li><a href="#portfolio" class="nav-link custom-hover">Studio UI</a></li>
+            <li><a href="#contact" class="nav-link custom-hover">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-badge reveal-up custom-hover">
+            Roblox UI Designer & Scripter
+        </div>
+        <h1 class="hero-title reveal-up delay-100">Crafting Clean Interfaces.</h1>
+        
+        <div class="hero-subtitle reveal-up delay-200">
+            <span id="typewriter-text"></span><span class="type-cursor"></span>
+        </div>
+        
+        <div class="hero-scroll-indicator">
+            <div class="mouse-icon">
+                <div class="mouse-wheel"></div>
+            </div>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section-container">
+        
+        <div class="section-header reveal-up">
+            <h2 class="section-title">Studio UI Designs</h2>
+            <p class="section-desc">
+                A collection of my recent UI layout work constructed entirely within Roblox Studio. 
+                Focusing on flawless AspectRatio scaling, clean hierarchies, Kekui implementations, 
+                and responsive cross-device architecture. Featuring both high-fidelity mockups and active video interactions.
+            </p>
+        </div>
+
+        <div class="gallery-filters reveal-up delay-100" id="filter-container">
+            <button class="filter-btn active custom-hover" data-filter="all">All Designs</button>
+            <button class="filter-btn custom-hover" data-filter="photo">Screenshots</button>
+            <button class="filter-btn custom-hover" data-filter="video">Video Interactions</button>
+            <button class="filter-btn custom-hover" data-filter="shop">Shop UIs</button>
+            <button class="filter-btn custom-hover" data-filter="hud">HUDs</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+            </div>
+
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-content reveal-up">
+            <div class="footer-logo">Real_heyokiaa</div>
+            <p class="footer-text">
+                Specializing in Roblox UI/UX. Let's build something scalable. 
+                No Offset, only Scale.
+            </p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link custom-hover" aria-label="Roblox Profile">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5.3 1.9L1.9 20.7l16.8 3.4L22.1 5.3 5.3 1.9zm8.5 12.8l-3.8-.8.8-3.8 3.8.8-.8 3.8z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link custom-hover" aria-label="Discord">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.3 5.5c-1.6-.7-3.3-1.1-5.1-1.3-.2.4-.4.8-.6 1.3-2-.3-4-.3-6 0-.2-.5-.4-.9-.6-1.3-1.8.2-3.5.6-5.1 1.3C-.2 14.6-1 20 1.5 22.8c2.1 1.6 4.1 2.5 6.1 3.1.5-.7.9-1.4 1.3-2.1-1.1-.3-2.1-.8-3-1.4.2-.1.4-.3.6-.5 4.3 2 9.1 2 13.4 0 .2.2.4.4.6.5-.9.6-1.9 1-3 1.4.4.8.9 1.5 1.3 2.1 2-.6 4-1.5 6.1-3.1 2.8-3.3 1.6-9.6-3-17.3zm-11.6 12c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1 2.7-2.4 2.7zm6.6 0c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1.1 2.7-2.4 2.7z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link custom-hover" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="copyright">
+                &copy; <span id="year"></span> Real_heyokiaa. Built for Roblox Development Portfolios.
+            </div>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        
+        <button class="lightbox-btn btn-close custom-hover" id="lb-close" aria-label="Close Lightbox">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+
+        <button class="lightbox-btn btn-prev custom-hover" id="lb-prev" aria-label="Previous Item">
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+        </button>
+
+        <button class="lightbox-btn btn-next custom-hover" id="lb-next" aria-label="Next Item">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+        </button>
+
+        <div class="lightbox-content-wrapper">
+            <div class="lightbox-media" id="lb-media-container"></div>
+            
+            <div class="lightbox-details">
+                <h3 class="lightbox-title" id="lb-title">Project Title</h3>
+                <p id="lb-desc">Project Description goes here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ========================================================================
+         * 1. CORE UTILITIES & INITIALIZATION
+         * ========================================================================
+         */
+        
+        // Remove Loader on Window Load
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+            
+            // Set Copyright Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+        });
+
+        /**
+         * ========================================================================
+         * 2. CUSTOM CURSOR LOGIC
+         * ========================================================================
+         */
+        const cursorDot = document.getElementById('custom-cursor-dot');
+        const cursorRing = document.getElementById('custom-cursor-ring');
+        
+        // Track mouse position
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+
+        // Update coordinates on move
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Animation loop for smooth trailing ring
+        function animateCursor() {
+            // Instant dot follow
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+            
+            // Lerp ring follow
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Add hover effects to interactable elements
+        const setupCursorHoverEvents = () => {
+            const hoverElements = document.querySelectorAll('a, button, .custom-hover, .gallery-item');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('cursor-hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('cursor-hover');
+                });
+            });
+        };
+
+        /**
+         * ========================================================================
+         * 3. PARTICLE ENGINE (HTML5 CANVAS)
+         * ========================================================================
+         */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() * 1) - 0.5;
+                this.speedY = (Math.random() * 1) - 0.5;
+                this.color = 'rgba(59, 130, 246, 0.4)'; // Primary color with opacity
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Bounce off edges
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            // Number of particles depends on screen size to maintain performance
+            let numberOfParticles = (canvas.width * canvas.height) / 15000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                
+                // Connect particles with lines if close
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 - distance/1000})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        /**
+         * ========================================================================
+         * 4. NAVBAR SCROLL LOGIC
+         * ========================================================================
+         */
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scroll Down -> Hide
+                navbar.classList.add('hidden');
+            } else {
+                // Scroll Up -> Show
+                navbar.classList.remove('hidden');
+            }
+            // Add background opacity change based on scroll
+            if(scrollTop > 50) {
+                navbar.style.backgroundColor = 'rgba(10, 10, 12, 0.95)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
+            } else {
+                navbar.style.backgroundColor = 'rgba(10, 10, 12, 0.5)';
+                navbar.style.boxShadow = 'none';
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        /**
+         * ========================================================================
+         * 5. TYPEWRITER EFFECT
+         * ========================================================================
+         */
+        const typewriterElement = document.getElementById('typewriter-text');
+        const textArray = [
+            "Scaling UIs with Kekui.",
+            "Building modular Shop systems.",
+            "Designing responsive HUDs.",
+            "Perfecting AspectRatios."
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingDelay = 100;
+
+        function typeWriter() {
+            const currentText = textArray[textIndex];
+            
+            if (isDeleting) {
+                // Remove char
+                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+                typingDelay = 50; // Faster delete
+            } else {
+                // Add char
+                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                typingDelay = 100;
+            }
+
+            // Word completed
+            if (!isDeleting && charIndex === currentText.length) {
+                typingDelay = 2000; // Pause at end of word
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % textArray.length; // Next word
+                typingDelay = 500; // Pause before typing next word
+            }
+
+            setTimeout(typeWriter, typingDelay);
+        }
+        
+        setTimeout(typeWriter, 1000); // Start after 1s
+
+        /**
+         * ========================================================================
+         * 6. SCROLL REVEAL (INTERSECTION OBSERVER)
+         * ========================================================================
+         */
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target); // Reveal only once
+            });
+        }, revealOptions);
+
+        function initScrollReveals() {
+            document.querySelectorAll('.reveal-up').forEach(el => {
+                revealObserver.observe(el);
+            });
+        }
+
+        /**
+         * ========================================================================
+         * 7. DYNAMIC GALLERY DATA GENERATION & INJECTION
+         * ========================================================================
+         */
+        // We use a large data array to mock out an extensive portfolio.
+        // Replace placeholders with real assets in production.
+        const galleryData = [
+            {
+                id: 1,
+                title: "Premium Simulator Shop",
+                desc: "A fully scaled store UI. Built with AutoScale/Kekui for zero offset issues. Features scrolling frames and dynamic item grids.",
+                type: "photo", // photo or video
+                category: "shop",
+                src: "https://via.placeholder.com/800x600/161b22/3b82f6?text=Shop+UI+Screenshot", // Placeholder for actual image
+                tags: ["Kekui", "Grid Layout", "Scale Only"]
+            },
+            {
+                id: 2,
+                title: "Inventory System Drag/Drop",
+                desc: "Demonstration of a working UI inventory system. Custom scripts handle dropping items into scaled slots.",
+                type: "video",
+                category: "hud",
+                src: "https://www.w3schools.com/html/mov_bbb.mp4", // Placeholder for actual mp4
+                tags: ["Scripting", "Interaction", "HUD"]
+            },
+            {
+                id: 3,
+                title: "Main Menu Selection",
+                desc: "Clean, dark-mode inspired main menu with animated play buttons and settings panels.",
+                type: "photo",
+                category: "hud",
+                src: "https://via.placeholder.com/800x600/161b22/10b981?text=Main+Menu+UI",
+                tags: ["Main Menu", "Design", "Frames"]
+            },
+            {
+                id: 4,
+                title: "Daily Rewards Pop-up",
+                desc: "A center-anchored UI popup for claiming daily rewards. Uses UIAspectRatioConstraint for perfect mobile viewing.",
+                type: "photo",
+                category: "shop",
+                src: "https://via.placeholder.com/800x600/161b22/8b5cf6?text=Rewards+UI",
+                tags: ["Popup", "Mobile Ready"]
+            },
+            {
+                id: 5,
+                title: "Trading Hub Interface",
+                desc: "Live recording of the two-player trading window UI in action, showing lock/accept animations.",
+                type: "video",
+                category: "hud",
+                src: "https://www.w3schools.com/html/mov_bbb.mp4",
+                tags: ["Trading", "TweenService"]
+            },
+            {
+                id: 6,
+                title: "In-Game Currency Purchase",
+                desc: "A sleek DevProduct prompt layout built manually in Studio. Gradient backgrounds and UIStrokes.",
+                type: "photo",
+                category: "shop",
+                src: "https://via.placeholder.com/800x600/161b22/f59e0b?text=Robux+Shop",
+                tags: ["Monetization", "Gradients"]
+            },
+            // Replicating data to simulate a large portfolio for demonstration
+            {
+                id: 7,
+                title: "Settings Configuration Menu",
+                desc: "A scrollable list layout for audio, graphics, and gameplay settings.",
+                type: "photo",
+                category: "hud",
+                src: "https://via.placeholder.com/800x600/161b22/ec4899?text=Settings+Menu",
+                tags: ["ListLayout", "Settings"]
+            },
+            {
+                id: 8,
+                title: "Leaderboard Custom UI",
+                desc: "Custom player list replacing the core Roblox leaderboard. Clean and unobtrusive.",
+                type: "photo",
+                category: "hud",
+                src: "https://via.placeholder.com/800x600/161b22/ef4444?text=Custom+Leaderboard",
+                tags: ["HUD", "CoreGui"]
+            },
+            {
+                id: 9,
+                title: "Gacha Spin Wheel Animation",
+                desc: "Video showing the UI spinning mechanic with easing styles applied to the rotation property.",
+                type: "video",
+                category: "shop",
+                src: "https://www.w3schools.com/html/mov_bbb.mp4",
+                tags: ["Animation", "Gacha"]
+            },
+            {
+                id: 10,
+                title: "Quest Log Tracker",
+                desc: "A side-anchored HUD element that tracks player progress dynamically.",
+                type: "photo",
+                category: "hud",
+                src: "https://via.placeholder.com/800x600/161b22/06b6d4?text=Quest+Tracker",
+                tags: ["Tracking", "Side HUD"]
+            },
+            {
+                id: 11,
+                title: "Weapon Loadout Screen",
+                desc: "Grid-based selection for equipping gear before a match starts.",
+                type: "photo",
+                category: "hud",
+                src: "https://via.placeholder.com/800x600/161b22/6366f1?text=Loadout+UI",
+                tags: ["Selection", "Arsenal"]
+            },
+            {
+                id: 12,
+                title: "Vehicle Dealership Layout",
+                desc: "A shop specifically designed to showcase 3D viewport frames inside 2D UI.",
+                type: "video",
+                category: "shop",
+                src: "https://www.w3schools.com/html/mov_bbb.mp4",
+                tags: ["ViewportFrame", "Shop"]
+            }
+        ];
+
+        const galleryGrid = document.getElementById('gallery-grid');
+
+        // Render function
+        function renderGallery(filter = 'all') {
+            // Clear current grid
+            galleryGrid.innerHTML = '';
+            
+            // Filter data
+            const filteredData = filter === 'all' 
+                ? galleryData 
+                : galleryData.filter(item => item.type === filter || item.category === filter);
+
+            // Generate HTML
+            filteredData.forEach((item, index) => {
+                
+                // SVG Icons based on media type
+                const photoIcon = `<svg class="play-icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
+                const videoIcon = `<svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+                const mediaBadge = item.type === 'video' ? `${videoIcon} Video` : `${photoIcon} Photo`;
+
+                // Calculate stagger delay based on index for animation
+                const delayClass = `delay-${((index % 5) + 1) * 100}`;
+
+                // Create Card Element
+                const card = document.createElement('div');
+                card.className = `gallery-item reveal-up ${delayClass}`;
+                card.setAttribute('data-id', item.id);
+                
+                // Construct HTML String
+                card.innerHTML = `
+                    <div class="item-thumbnail">
+                        <div class="media-badge">${mediaBadge}</div>
+                        ${item.type === 'video' 
+                            ? `<video src="${item.src}" muted loop playsinline></video>` 
+                            : `<img src="${item.src}" loading="lazy" alt="${item.title}">`
+                        }
+                        <div class="item-overlay">
+                            <button class="btn-expand" aria-label="Expand">
+                                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-title">${item.title}</h3>
+                        <p class="item-desc">${item.desc}</p>
+                        <div class="item-tags">
+                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+
+                // Add Click Event to open Lightbox
+                card.addEventListener('click', () => openLightbox(item.id));
+                
+                // For videos, play on hover
+                if(item.type === 'video') {
+                    const vidElement = card.querySelector('video');
+                    card.addEventListener('mouseenter', () => vidElement.play().catch(e => console.log(e)));
+                    card.addEventListener('mouseleave', () => {
+                        vidElement.pause();
+                        vidElement.currentTime = 0;
+                    });
+                }
+
+                galleryGrid.appendChild(card);
+            });
+
+            // Re-initialize intersection observers for new elements
+            initScrollReveals();
+            setupCursorHoverEvents(); // Re-bind custom cursor
+        }
+
+        // Initial Render
+        renderGallery();
+
+        /**
+         * ========================================================================
+         * 8. FILTERING LOGIC
+         * ========================================================================
+         */
+        const filterContainer = document.getElementById('filter-container');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        filterContainer.addEventListener('click', (e) => {
+            if(e.target.classList.contains('filter-btn')) {
+                // Remove active class from all
+                filterBtns.forEach(btn => btn.classList.remove('active'));
+                // Add to clicked
+                e.target.classList.add('active');
+                
+                // Get filter value and render
+                const filterValue = e.target.getAttribute('data-filter');
+                renderGallery(filterValue);
+            }
+        });
+
+        /**
+         * ========================================================================
+         * 9. LIGHTBOX (MODAL) LOGIC
+         * ========================================================================
+         */
+        const lightbox = document.getElementById('lightbox');
+        const lbMediaContainer = document.getElementById('lb-media-container');
+        const lbTitle = document.getElementById('lb-title');
+        const lbDesc = document.getElementById('lb-desc');
+        const btnClose = document.getElementById('lb-close');
+        const btnPrev = document.getElementById('lb-prev');
+        const btnNext = document.getElementById('lb-next');
+
+        let currentActiveId = null;
+        let currentFilteredData = [];
+
+        function updateLightboxData(item) {
+            // Clear current media
+            lbMediaContainer.innerHTML = '';
+            
+            if(item.type === 'photo') {
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.title;
+                lbMediaContainer.appendChild(img);
+            } else if (item.type === 'video') {
+                const vid = document.createElement('video');
+                vid.src = item.src;
+                vid.controls = true;
+                vid.autoplay = true;
+                vid.loop = true;
+                lbMediaContainer.appendChild(vid);
+            }
+
+            lbTitle.textContent = item.title;
+            lbDesc.textContent = item.desc;
+        }
+
+        function openLightbox(id) {
+            // Determine current active filter to map prev/next correctly
+            const activeFilterBtn = document.querySelector('.filter-btn.active');
+            const filterValue = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
+            
+            currentFilteredData = filterValue === 'all' 
+                ? galleryData 
+                : galleryData.filter(i => i.type === filterValue || i.category === filterValue);
+            
+            currentActiveId = id;
+            const item = currentFilteredData.find(i => i.id === id);
+            
+            if(item) {
+                updateLightboxData(item);
+                lightbox.classList.add('active');
+                document.body.classList.add('no-scroll'); // Prevent background scrolling
+            }
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            
+            // Stop video playing in background
+            const video = lbMediaContainer.querySelector('video');
+            if(video) {
+                video.pause();
+                video.removeAttribute('src'); 
+                video.load();
+            }
+            // slight delay before clearing to allow fade out animation
+            setTimeout(() => {
+                lbMediaContainer.innerHTML = '';
+            }, 300);
+        }
+
+        function navigateLightbox(direction) {
+            if(!currentFilteredData.length) return;
+            
+            const currentIndex = currentFilteredData.findIndex(i => i.id === currentActiveId);
+            let nextIndex;
+
+            if (direction === 'next') {
+                nextIndex = currentIndex === currentFilteredData.length - 1 ? 0 : currentIndex + 1;
+            } else {
+                nextIndex = currentIndex === 0 ? currentFilteredData.length - 1 : currentIndex - 1;
+            }
+
+            const nextItem = currentFilteredData[nextIndex];
+            currentActiveId = nextItem.id;
+            updateLightboxData(nextItem);
+        }
+
+        // Lightbox Event Listeners
+        btnClose.addEventListener('click', closeLightbox);
+        btnNext.addEventListener('click', () => navigateLightbox('next'));
+        btnPrev.addEventListener('click', () => navigateLightbox('prev'));
+
+        // Close on background click
+        lightbox.addEventListener('click', (e) => {
+            if(e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard Navigation
+        window.addEventListener('keydown', (e) => {
+            if(!lightbox.classList.contains('active')) return;
+            
+            if(e.key === 'Escape') closeLightbox();
+            if(e.key === 'ArrowRight') navigateLightbox('next');
+            if(e.key === 'ArrowLeft') navigateLightbox('prev');
+        });
+
+        /**
+         * ========================================================================
+         * 10. FINAL INITIALIZATIONS
+         * ========================================================================
+         */
+        // Ensure reveal observers are active on start
+        initScrollReveals();
+        // Setup custom cursors on statically loaded elements
+        setupCursorHoverEvents();
+
+    </script>
+</body>
+</html>

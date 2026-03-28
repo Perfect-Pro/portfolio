@@ -1,1688 +1,1157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="real_heyokiaa - Advanced Roblox UI Designer, Scripter, and Developer.">
-    <meta name="author" content="real_heyokiaa">
-    
-    <title>real_heyokiaa | Interface & Systems</title>
-
-    <style>
-        /* ==========================================================================
-           1. CORE SYSTEM VARIABLES (THEME CONFIGURATION)
-           ========================================================================== */
-        :root {
-            /* Cyber-Dark Palette */
-            --bg-0: #050507;
-            --bg-1: #0a0a0e;
-            --bg-2: #121218;
-            --bg-3: #1a1a24;
-            --bg-glass: rgba(10, 10, 14, 0.6);
-            
-            --neon-primary: #00f0ff;
-            --neon-secondary: #ff003c;
-            --neon-accent: #7000ff;
-            --neon-success: #00ff66;
-            --neon-warning: #ffb800;
-
-            --text-100: #ffffff;
-            --text-200: #e0e0e0;
-            --text-300: #a0a0a0;
-            --text-400: #606060;
-            --text-glitch: rgba(255, 255, 255, 0.9);
-
-            /* Typography */
-            --font-sys: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            --font-display: 'Impact', 'Arial Black', sans-serif;
-
-            /* Spacing Grid (8px baseline) */
-            --sp-1: 8px;
-            --sp-2: 16px;
-            --sp-3: 24px;
-            --sp-4: 32px;
-            --sp-5: 40px;
-            --sp-6: 48px;
-            --sp-8: 64px;
-            --sp-10: 80px;
-            --sp-12: 96px;
-            --sp-16: 128px;
-            --sp-20: 160px;
-
-            /* Radii */
-            --rad-sm: 4px;
-            --rad-md: 8px;
-            --rad-lg: 16px;
-            --rad-xl: 24px;
-            --rad-max: 9999px;
-
-            /* Z-Index Architecture */
-            --z-bg: -100;
-            --z-base: 1;
-            --z-content: 10;
-            --z-float: 50;
-            --z-nav: 100;
-            --z-modal: 1000;
-            --z-loader: 2000;
-            --z-cursor: 9999;
-
-            /* Animation Timings */
-            --ts-fast: 0.15s;
-            --ts-mid: 0.3s;
-            --ts-slow: 0.6s;
-            --ts-expo: cubic-bezier(0.19, 1, 0.22, 1);
-            --ts-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-            /* Shadows & Glows */
-            --glow-primary: 0 0 20px rgba(0, 240, 255, 0.3);
-            --glow-secondary: 0 0 30px rgba(255, 0, 60, 0.3);
-            --glow-text: 0 0 10px rgba(0, 240, 255, 0.5);
-            --shadow-card: 0 20px 40px rgba(0,0,0,0.8);
-            --shadow-glass: inset 0 0 0 1px rgba(255,255,255,0.05);
-            
-            /* Structural Variables */
-            --container-width: 1400px;
-            --nav-height: 80px;
-        }
-
-        /* ==========================================================================
-           2. RESET & NORMALIZATION
-           ========================================================================== */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            cursor: none; /* Enforce Custom Cursor System Wide */
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            font-size: 16px;
-            background: var(--bg-0);
-            color: var(--text-200);
-            font-family: var(--font-sys);
-            overscroll-behavior: none;
-            /* Hide default scrollbar for custom scroll engine */
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
-        }
-        
-        html::-webkit-scrollbar {
-            display: none;
-        }
-
-        body {
-            overflow-x: hidden;
-            width: 100vw;
-            min-height: 100vh;
-            line-height: 1.6;
-            position: relative;
-        }
-
-        ::selection {
-            background: var(--neon-primary);
-            color: var(--bg-0);
-        }
-
-        ul, ol { list-style: none; }
-        a { text-decoration: none; color: inherit; }
-        button, input, textarea { font-family: inherit; border: none; background: none; outline: none; }
-        img, video, svg { max-width: 100%; display: block; }
-
-        /* ==========================================================================
-           3. SYSTEM LOADER (TERMINAL BOOT SEQUENCE)
-           ========================================================================== */
-        #sys-loader {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-0);
-            z-index: var(--z-loader);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: var(--sp-8);
-            font-family: var(--font-mono);
-            color: var(--neon-primary);
-            transition: opacity 1s var(--ts-expo), transform 1s var(--ts-expo);
-        }
-
-        #sys-loader.boot-complete {
-            opacity: 0;
-            transform: translateY(-100%);
-            pointer-events: none;
-        }
-
-        .loader-log {
-            font-size: 0.85rem;
-            margin-bottom: var(--sp-1);
-            opacity: 0.8;
-            text-shadow: var(--glow-text);
-            display: flex;
-            gap: var(--sp-2);
-        }
-
-        .loader-log .timestamp {
-            color: var(--text-400);
-        }
-
-        .loader-bar-container {
-            width: 100%;
-            height: 2px;
-            background: var(--bg-2);
-            margin-top: var(--sp-4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loader-bar-fill {
-            position: absolute;
-            top: 0; left: 0; height: 100%;
-            width: 0%;
-            background: var(--neon-primary);
-            box-shadow: var(--glow-primary);
-            transition: width 0.1s linear;
-        }
-
-        /* ==========================================================================
-           4. CUSTOM CURSOR ENGINE
-           ========================================================================== */
-        #cursor-core {
-            position: fixed;
-            top: 0; left: 0;
-            width: 6px; height: 6px;
-            background: var(--neon-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: var(--z-cursor);
-            transition: width var(--ts-fast), height var(--ts-fast), background var(--ts-fast);
-            box-shadow: 0 0 10px var(--neon-primary);
-        }
-
-        #cursor-ring {
-            position: fixed;
-            top: 0; left: 0;
-            width: 40px; height: 40px;
-            border: 1px solid rgba(0, 240, 255, 0.4);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: var(--z-cursor);
-            transition: width 0.3s var(--ts-expo), height 0.3s var(--ts-expo), border-color var(--ts-fast), background var(--ts-fast);
-        }
-
-        /* Magnetic State Hover overrides */
-        body.cursor-magnetic #cursor-core {
-            width: 0px; height: 0px; opacity: 0;
-        }
-        body.cursor-magnetic #cursor-ring {
-            width: 60px; height: 60px;
-            border-color: var(--neon-secondary);
-            background: rgba(255, 0, 60, 0.1);
-            backdrop-filter: blur(2px);
-        }
-
-        /* ==========================================================================
-           5. CANVAS BACKGROUND (INTERACTIVE NODES)
-           ========================================================================== */
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: var(--z-bg);
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        /* Ambient global grid overlay */
-        .ambient-grid {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: var(--z-bg);
-            pointer-events: none;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-        
-        .ambient-grid::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, var(--bg-0) 80%);
-        }
-
-        /* ==========================================================================
-           6. NAVIGATION SUBSYSTEM
-           ========================================================================== */
-        .sys-nav {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            height: var(--nav-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 var(--sp-10);
-            z-index: var(--z-nav);
-            background: linear-gradient(to bottom, rgba(5,5,7,0.9) 0%, transparent 100%);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: transform var(--ts-mid) var(--ts-expo);
-        }
-
-        .sys-nav.hide {
-            transform: translateY(-100%);
-        }
-
-        .nav-brand {
-            font-family: var(--font-mono);
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-100);
-            display: flex;
-            align-items: center;
-            gap: var(--sp-2);
-            position: relative;
-        }
-
-        .nav-brand::before {
-            content: 'sys.init()';
-            font-size: 0.6rem;
-            position: absolute;
-            top: -15px; left: 0;
-            color: var(--neon-primary);
-        }
-
-        .nav-brand .accent { color: var(--neon-primary); }
-
-        .nav-menu {
-            display: flex;
-            gap: var(--sp-6);
-        }
-
-        .nav-item {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-300);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            padding: var(--sp-1) 0;
-            transition: color var(--ts-fast);
-        }
-
-        .nav-item::before {
-            content: '0' counter(nav-idx) '.';
-            counter-increment: nav-idx;
-            color: var(--neon-primary);
-            margin-right: var(--sp-1);
-            font-size: 0.7rem;
-            opacity: 0.5;
-        }
-
-        .nav-menu { counter-reset: nav-idx; }
-
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0%; height: 1px;
-            background: var(--neon-primary);
-            transition: width var(--ts-mid) var(--ts-expo);
-        }
-
-        .nav-item:hover { color: var(--text-100); }
-        .nav-item:hover::after { width: 100%; }
-
-        /* Status Indicator */
-        .sys-status {
-            display: flex;
-            align-items: center;
-            gap: var(--sp-2);
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--neon-success);
-            border: 1px solid rgba(0,255,102,0.2);
-            padding: var(--sp-1) var(--sp-2);
-            border-radius: var(--rad-max);
-            background: rgba(0,255,102,0.05);
-        }
-        
-        .sys-status .ping {
-            width: 6px; height: 6px;
-            background: var(--neon-success);
-            border-radius: 50%;
-            animation: ping 2s infinite;
-        }
-
-        /* ==========================================================================
-           7. HERO SECTION (GLITCH & PARALLAX)
-           ========================================================================== */
-        .hero {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            perspective: 1000px;
-        }
-
-        .hero-content {
-            text-align: center;
-            transform-style: preserve-3d;
-            z-index: var(--z-content);
-        }
-
-        .hero-label {
-            font-family: var(--font-mono);
-            color: var(--neon-primary);
-            font-size: 1rem;
-            letter-spacing: 4px;
-            margin-bottom: var(--sp-4);
-            display: inline-block;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: var(--sp-1) var(--sp-3);
-            background: rgba(0, 240, 255, 0.05);
-            transform: translateZ(20px);
-        }
-
-        /* Advanced Glitch Text System */
-        .glitch-wrapper {
-            position: relative;
-            transform: translateZ(50px);
-        }
-
-        .glitch-text {
-            font-size: clamp(4rem, 8vw, 8rem);
-            font-weight: 900;
-            color: var(--text-100);
-            line-height: 1;
-            margin-bottom: var(--sp-2);
-            position: relative;
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
-        }
-
-        .glitch-text::before,
-        .glitch-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-
-        .glitch-text::before {
-            left: 2px;
-            text-shadow: -2px 0 var(--neon-secondary);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim-1 5s infinite linear alternate-reverse;
-        }
-
-        .glitch-text::after {
-            left: -2px;
-            text-shadow: -2px 0 var(--neon-primary);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim-2 5s infinite linear alternate-reverse;
-        }
-
-        .hero-sub {
-            font-size: 1.5rem;
-            color: var(--text-300);
-            max-width: 600px;
-            margin: 0 auto;
-            transform: translateZ(30px);
-        }
-
-        /* Scroll Down Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: var(--sp-10);
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--sp-2);
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--text-400);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--neon-primary), transparent);
-            animation: scroll-line-anim 2s infinite cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        /* ==========================================================================
-           8. LAYOUT ARCHITECTURE & UTILITIES
-           ========================================================================== */
-        .section-wrap {
-            padding: var(--sp-20) var(--sp-10);
-            max-width: var(--container-width);
-            margin: 0 auto;
-            position: relative;
-            z-index: var(--z-content);
-        }
-
-        .sec-header {
-            margin-bottom: var(--sp-12);
-            position: relative;
-        }
-
-        .sec-num {
-            font-family: var(--font-mono);
-            font-size: 4rem;
-            font-weight: 900;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
-            position: absolute;
-            top: -40px;
-            left: -20px;
-            z-index: -1;
-        }
-
-        .sec-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-100);
-            display: flex;
-            align-items: center;
-            gap: var(--sp-4);
-        }
-
-        .sec-title::after {
-            content: '';
-            height: 1px;
-            flex-grow: 1;
-            background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
-        }
-
-        .sec-desc {
-            font-size: 1.2rem;
-            color: var(--text-300);
-            max-width: 700px;
-            margin-top: var(--sp-4);
-        }
-
-        /* ==========================================================================
-           9. CURRENT WORKED ON THINGS (TIMELINE / ROADMAP GIMMICK)
-           ========================================================================== */
-        .roadmap-container {
-            position: relative;
-            padding-left: var(--sp-6);
-            border-left: 2px solid var(--bg-3);
-        }
-
-        .roadmap-node {
-            position: relative;
-            margin-bottom: var(--sp-10);
-            padding: var(--sp-6);
-            background: var(--bg-1);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: var(--rad-lg);
-            transition: transform var(--ts-mid), border-color var(--ts-mid), box-shadow var(--ts-mid);
-        }
-
-        .roadmap-node::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: calc(var(--sp-6) * -1 - 9px); /* Align with border */
-            width: 16px;
-            height: 16px;
-            background: var(--bg-0);
-            border: 2px solid var(--neon-primary);
-            border-radius: 50%;
-            transition: background var(--ts-mid), box-shadow var(--ts-mid);
-        }
-
-        .roadmap-node:hover {
-            transform: translateX(10px);
-            border-color: rgba(0, 240, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .roadmap-node:hover::before {
-            background: var(--neon-primary);
-            box-shadow: var(--glow-primary);
-        }
-
-        .node-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--sp-2);
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--neon-primary);
-        }
-
-        .node-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            background: rgba(0,255,102,0.1);
-            border: 1px solid rgba(0,255,102,0.3);
-            border-radius: var(--rad-max);
-            color: var(--neon-success);
-        }
-        
-        .node-status.dev {
-            background: rgba(255,184,0,0.1);
-            border-color: rgba(255,184,0,0.3);
-            color: var(--neon-warning);
-        }
-
-        .node-title {
-            font-size: 2rem;
-            color: var(--text-100);
-            margin-bottom: var(--sp-2);
-        }
-
-        .node-desc {
-            color: var(--text-300);
-            margin-bottom: var(--sp-4);
-        }
-
-        .node-tags {
-            display: flex;
-            gap: var(--sp-2);
-            flex-wrap: wrap;
-        }
-
-        .sys-tag {
-            padding: 4px 12px;
-            background: var(--bg-2);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--rad-sm);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text-300);
-        }
-
-        /* ==========================================================================
-           10. STUDIO UI GALLERY (3D TILT CARDS & MASONRY)
-           ========================================================================== */
-        .filter-sys {
-            display: flex;
-            gap: var(--sp-2);
-            margin-bottom: var(--sp-8);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: var(--sp-4);
-        }
-
-        .filter-btn {
-            padding: var(--sp-2) var(--sp-4);
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-400);
-            border: 1px solid transparent;
-            transition: all var(--ts-fast);
-            position: relative;
-        }
-
-        .filter-btn:hover { color: var(--text-200); }
-        .filter-btn.active {
-            color: var(--neon-primary);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            background: rgba(0, 240, 255, 0.05);
-            border-radius: var(--rad-sm);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: var(--sp-6);
-            perspective: 1500px;
-        }
-
-        /* The Tilt Card System */
-        .ui-card {
-            background: var(--bg-1);
-            border-radius: var(--rad-lg);
-            border: 1px solid rgba(255,255,255,0.05);
-            overflow: hidden;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: box-shadow var(--ts-mid);
-            /* Transform set via JS for tilt */
-        }
-
-        .ui-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity var(--ts-mid);
-        }
-
-        .ui-card:hover {
-            box-shadow: var(--shadow-card), 0 0 20px rgba(0, 240, 255, 0.1);
-            z-index: 10;
-        }
-
-        .ui-card:hover::before { opacity: 1; }
-
-        .card-media {
-            height: 260px;
-            width: 100%;
-            background: var(--bg-2);
-            position: relative;
-            overflow: hidden;
-            transform: translateZ(20px); /* 3D pop effect */
-        }
-
-        /* Procedural CSS Pattern Backgrounds as strict placeholders to avoid broken images */
-        .media-bg-1 {
-            background-color: #1e1e24;
-            background-image: radial-gradient(#3b82f6 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .media-bg-2 {
-            background: repeating-linear-gradient(45deg, #121218, #121218 10px, #1a1a24 10px, #1a1a24 20px);
-        }
-        .media-bg-3 {
-            background: linear-gradient(135deg, #0a0a0e 25%, transparent 25%) -50px 0,
-                        linear-gradient(225deg, #0a0a0e 25%, transparent 25%) -50px 0,
-                        linear-gradient(315deg, #0a0a0e 25%, transparent 25%),
-                        linear-gradient(45deg, #0a0a0e 25%, transparent 25%);
-            background-size: 100px 100px;
-            background-color: #161b22;
-        }
-        .media-bg-4 {
-            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.2) 0%, transparent 60%), var(--bg-2);
-        }
-
-        /* SVG Video/Photo Indicators */
-        .media-type-icon {
-            position: absolute;
-            top: var(--sp-3);
-            right: var(--sp-3);
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 6px 10px;
-            border-radius: var(--rad-md);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: #fff;
-            transform: translateZ(30px);
-            z-index: 5;
-        }
-
-        .media-type-icon svg { width: 14px; height: 14px; fill: currentColor; }
-
-        /* The inner structure representation (simulating UI layout) */
-        .wireframe-ui {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%; height: 70%;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: var(--rad-md);
-            display: flex; flex-direction: column; gap: 8px;
-            padding: 8px;
-        }
-        .wire-header { height: 20px; background: rgba(255,255,255,0.05); border-radius: 4px; }
-        .wire-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-grow: 1; }
-        .wire-box { background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 4px; }
-        .wire-box.alt { background: rgba(255, 0, 60, 0.1); border-color: rgba(255, 0, 60, 0.2); }
-
-        .card-info {
-            padding: var(--sp-4);
-            transform: translateZ(10px);
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            color: var(--text-100);
-            margin-bottom: var(--sp-1);
-        }
-
-        .card-tech {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--neon-accent);
-            margin-bottom: var(--sp-3);
-        }
-
-        .card-desc {
-            font-size: 0.9rem;
-            color: var(--text-300);
-            margin-bottom: var(--sp-4);
-            line-height: 1.5;
-        }
-
-        /* Hover action button */
-        .card-action {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--neon-primary);
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all var(--ts-mid);
-        }
-
-        .ui-card:hover .card-action {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .card-action svg { width: 16px; height: 16px; fill: currentColor; transition: transform var(--ts-fast); }
-        .card-action:hover svg { transform: translateX(5px); }
-
-        /* ==========================================================================
-           11. LIGHTBOX SUBSYSTEM (MODAL VIEW)
-           ========================================================================== */
-        #lightbox-sys {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(5, 5, 7, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: var(--z-modal);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity var(--ts-mid), visibility var(--ts-mid);
-        }
-
-        #lightbox-sys.active {
-            opacity: 1; visibility: visible;
-        }
-
-        .lb-container {
-            width: 90%; max-width: 1200px;
-            display: flex; flex-direction: column;
-            transform: scale(0.95) translateY(20px);
-            transition: transform 0.5s var(--ts-expo);
-        }
-
-        #lightbox-sys.active .lb-container {
-            transform: scale(1) translateY(0);
-        }
-
-        .lb-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: var(--sp-4);
-            padding-bottom: var(--sp-4);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .lb-title { font-size: 1.5rem; color: var(--text-100); }
-        .lb-meta { font-family: var(--font-mono); color: var(--neon-primary); font-size: 0.9rem; }
-
-        .lb-close {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            color: #fff;
-            transition: all var(--ts-fast);
-        }
-        .lb-close:hover { background: rgba(255,0,60,0.2); border-color: var(--neon-secondary); color: var(--neon-secondary); transform: rotate(90deg); }
-
-        .lb-media-stage {
-            width: 100%; height: 60vh;
-            background: var(--bg-1);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: var(--rad-lg);
-            position: relative;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
-        }
-        
-        .lb-media-stage .wireframe-ui { transform: translate(-50%, -50%) scale(1.5); }
-
-        .lb-controls {
-            position: absolute; top: 50%; left: 0; width: 100%;
-            display: flex; justify-content: space-between; padding: 0 var(--sp-4);
-            transform: translateY(-50%); pointer-events: none;
-        }
-
-        .lb-btn {
-            width: 50px; height: 50px;
-            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%; color: #fff; pointer-events: auto;
-            display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px); transition: all var(--ts-fast);
-        }
-        .lb-btn:hover { background: var(--neon-primary); border-color: var(--neon-primary); color: #000; transform: scale(1.1); }
-        .lb-btn svg { width: 24px; height: 24px; fill: currentColor; }
-
-        /* ==========================================================================
-           12. TERMINAL FOOTER / CONTACT
-           ========================================================================== */
-        .terminal-footer {
-            background: var(--bg-1);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding: var(--sp-10) var(--sp-10);
-            position: relative;
-            z-index: var(--z-content);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--sp-10);
-        }
-
-        .terminal-ui {
-            background: var(--bg-0);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--rad-md);
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .term-header {
-            background: var(--bg-2);
-            padding: var(--sp-2) var(--sp-4);
-            display: flex; align-items: center; gap: var(--sp-2);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .term-dots { display: flex; gap: 6px; }
-        .term-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .td-r { background: #ff5f56; } .td-y { background: #ffbd2e; } .td-g { background: #27c93f; }
-        .term-title { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-400); margin-left: auto; }
-
-        .term-body {
-            padding: var(--sp-4);
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: var(--text-200);
-            min-height: 200px;
-        }
-
-        .term-line { margin-bottom: 8px; }
-        .term-prompt { color: var(--neon-primary); margin-right: 8px; }
-        .term-cmd { color: var(--neon-success); }
-        .term-out { color: var(--text-300); margin-top: 4px; padding-left: 16px; }
-
-        .term-input-line { display: flex; align-items: center; margin-top: 16px; }
-        .term-cursor {
-            display: inline-block; width: 8px; height: 1.2em;
-            background: var(--text-200); margin-left: 4px;
-            animation: terminal-blink 1s step-end infinite;
-        }
-
-        .footer-info {
-            display: flex; flex-direction: column; justify-content: center;
-        }
-
-        .footer-brand {
-            font-size: 2rem; font-weight: 800; color: var(--text-100);
-            margin-bottom: var(--sp-2); display: flex; align-items: center; gap: var(--sp-2);
-        }
-
-        .social-matrix {
-            display: flex; gap: var(--sp-4); margin-top: var(--sp-6);
-        }
-
-        .soc-link {
-            width: 50px; height: 50px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--rad-md);
-            display: flex; justify-content: center; align-items: center;
-            color: var(--text-300); transition: all var(--ts-mid);
-            position: relative; overflow: hidden;
-        }
-        
-        .soc-link::before {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
-            background: var(--neon-primary); transition: height var(--ts-mid); z-index: 0;
-        }
-
-        .soc-link:hover { border-color: var(--neon-primary); color: #000; box-shadow: var(--glow-primary); }
-        .soc-link:hover::before { height: 100%; }
-        .soc-link svg { width: 20px; height: 20px; fill: currentColor; position: relative; z-index: 1; }
-
-        .copyright-line {
-            margin-top: var(--sp-8); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-400);
-        }
-
-        /* ==========================================================================
-           13. ANIMATIONS & KEYFRAMES
-           ========================================================================== */
-        @keyframes ping {
-            0% { box-shadow: 0 0 0 0 rgba(0,255,102,0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(0,255,102,0); }
-            100% { box-shadow: 0 0 0 0 rgba(0,255,102,0); }
-        }
-
-        @keyframes glitch-anim-1 {
-            0% { clip: rect(20px, 9999px, 85px, 0); transform: translate(0); }
-            10% { clip: rect(61px, 9999px, 35px, 0); transform: translate(-2px, 2px); }
-            20% { clip: rect(15px, 9999px, 94px, 0); transform: translate(2px, -2px); }
-            30% { clip: rect(80px, 9999px, 12px, 0); transform: translate(-2px, 2px); }
-            40% { clip: rect(44px, 9999px, 50px, 0); transform: translate(2px, -2px); }
-            50% { clip: rect(98px, 9999px, 3px, 0); transform: translate(-2px, 2px); }
-            60% { clip: rect(32px, 9999px, 78px, 0); transform: translate(2px, -2px); }
-            70% { clip: rect(74px, 9999px, 25px, 0); transform: translate(-2px, 2px); }
-            80% { clip: rect(10px, 9999px, 88px, 0); transform: translate(2px, -2px); }
-            90% { clip: rect(55px, 9999px, 42px, 0); transform: translate(-2px, 2px); }
-            100% { clip: rect(90px, 9999px, 15px, 0); transform: translate(0); }
-        }
-
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(80px, 9999px, 15px, 0); transform: translate(0); }
-            10% { clip: rect(25px, 9999px, 90px, 0); transform: translate(2px, -2px); }
-            20% { clip: rect(66px, 9999px, 44px, 0); transform: translate(-2px, 2px); }
-            30% { clip: rect(12px, 9999px, 85px, 0); transform: translate(2px, -2px); }
-            40% { clip: rect(94px, 9999px, 20px, 0); transform: translate(-2px, 2px); }
-            50% { clip: rect(35px, 9999px, 60px, 0); transform: translate(2px, -2px); }
-            60% { clip: rect(78px, 9999px, 10px, 0); transform: translate(-2px, 2px); }
-            70% { clip: rect(5px, 9999px, 95px, 0); transform: translate(2px, -2px); }
-            80% { clip: rect(50px, 9999px, 33px, 0); transform: translate(-2px, 2px); }
-            90% { clip: rect(88px, 9999px, 55px, 0); transform: translate(2px, -2px); }
-            100% { clip: rect(15px, 9999px, 75px, 0); transform: translate(0); }
-        }
-
-        @keyframes scroll-line-anim {
-            0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
-            50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-            50.1% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
-            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
-        }
-
-        @keyframes terminal-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Scroll Reveal Utilities */
-        .sys-reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1), transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-            will-change: opacity, transform;
-        }
-        .sys-reveal.revealed { opacity: 1; transform: translateY(0); }
-
-        /* Media Queries */
-        @media (max-width: 1024px) {
-            .terminal-footer { grid-template-columns: 1fr; }
-            .hero-text { font-size: 4rem; }
-        }
-        @media (max-width: 768px) {
-            .nav-menu { display: none; } /* Simplified mobile nav for demo */
-            .sec-title { font-size: 2rem; }
-            .sec-num { font-size: 2.5rem; top: -20px; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            /* Disable custom cursor on touch */
-            #cursor-core, #cursor-ring { display: none; }
-            *, *::before, *::after { cursor: auto; }
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>real_heyokiaa — Roblox UI & Scripting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROOT & RESET
+   ============================================================ */
+:root {
+  --bg:        #08080c;
+  --bg-1:      #0e0e14;
+  --bg-2:      #16161f;
+  --bg-3:      #1e1e2a;
+  --cyan:      #00f0ff;
+  --red:       #ff2b4e;
+  --purple:    #9b5de5;
+  --green:     #00ff99;
+  --yellow:    #ffe44d;
+  --white:     #f0f0f8;
+  --muted:     #606080;
+  --mono:      'Space Mono', monospace;
+  --display:   'Bebas Neue', sans-serif;
+  --body:      'DM Sans', sans-serif;
+  --glow-c:    0 0 20px rgba(0,240,255,0.4);
+  --glow-r:    0 0 20px rgba(255,43,78,0.4);
+  --glow-p:    0 0 20px rgba(155,93,229,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: auto; }
+
+html {
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--body);
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar { display: none; }
+
+body { overflow-x: hidden; }
+
+::selection { background: var(--cyan); color: var(--bg); }
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { font-family: inherit; border: none; background: none; cursor: none; }
+img, svg { display: block; max-width: 100%; }
+
+/* ============================================================
+   CURSOR
+   ============================================================ */
+
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 10000;
+  display: flex; align-items: flex-end;
+  padding: 48px 64px;
+  font-family: var(--mono);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.19,1,.22,1);
+}
+#loader.out { opacity: 0; transform: translateY(-100%); pointer-events: none; }
+.ld-lines { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.ld-line { font-size: .78rem; color: var(--cyan); opacity: 0; animation: fadein .3s forwards; }
+.ld-bar-wrap { width: 100%; height: 2px; background: var(--bg-3); margin-top: 24px; }
+.ld-bar { height: 100%; width: 0%; background: var(--cyan); box-shadow: var(--glow-c); transition: width .1s linear; }
+.ld-ts { color: var(--muted); margin-right: 12px; }
+@keyframes fadein { to { opacity: .85; } }
+
+/* ============================================================
+   GRID BG
+   ============================================================ */
+.grid-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.grid-bg::after {
+  content:'';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, transparent 40%, var(--bg) 80%);
+}
+canvas#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .55; }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; height: 68px;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 64px;
+  background: rgba(8,8,12,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  transition: transform .3s;
+}
+nav.hidden { transform: translateY(-100%); }
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--white);
+}
+.nav-logo .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: var(--glow-c); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 6px var(--cyan)} 50%{box-shadow:0 0 18px var(--cyan)} }
+
+.nav-links { display: flex; gap: 40px; }
+.nav-link {
+  font-family: var(--mono); font-size: .75rem;
+  color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+  transition: color .2s; position: relative; padding-bottom: 2px;
+}
+.nav-link::after {
+  content:''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+  background: var(--cyan); transition: width .3s cubic-bezier(.19,1,.22,1);
+}
+.nav-link:hover { color: var(--white); }
+.nav-link:hover::after { width: 100%; }
+
+.nav-badge {
+  font-family: var(--mono); font-size: .68rem;
+  color: var(--green); border: 1px solid rgba(0,255,153,.25);
+  background: rgba(0,255,153,.06);
+  padding: 4px 12px; border-radius: 99px;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-badge .pip { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse2 2s infinite; }
+@keyframes pulse2 { 0%,100%{opacity:1}50%{opacity:.3} }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 120px 64px 64px;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+.hero-inner { max-width: 900px; }
+
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: .75rem; letter-spacing: 2px;
+  color: var(--cyan); border: 1px solid rgba(0,240,255,.25);
+  background: rgba(0,240,255,.05); padding: 6px 18px; border-radius: 99px;
+  margin-bottom: 40px;
+  animation: reveal .6s .2s both;
+}
+
+.hero-name {
+  font-family: var(--display);
+  font-size: clamp(5rem, 12vw, 11rem);
+  line-height: .95;
+  letter-spacing: 2px;
+  color: var(--white);
+  position: relative;
+  animation: reveal .6s .4s both;
+}
+.hero-name .line { display: block; }
+.hero-name .accent { color: var(--cyan); position: relative; }
+.hero-name .accent::after {
+  content: attr(data-t);
+  position: absolute; inset: 0;
+  color: var(--red);
+  clip-path: polygon(0 45%, 100% 45%, 100% 55%, 0 55%);
+  transform: translateX(-3px);
+  animation: glitch 4s infinite;
+}
+@keyframes glitch {
+  0%,90%,100%{transform:translateX(0);opacity:0}
+  92%{transform:translateX(-4px);opacity:.8;clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%)}
+  94%{transform:translateX(4px);clip-path:polygon(0 55%,100% 55%,100% 75%,0 75%)}
+  96%{transform:translateX(-2px)}
+  98%{transform:translateX(0);opacity:0}
+}
+
+.hero-sub {
+  margin-top: 28px;
+  font-size: 1.15rem; color: var(--muted); line-height: 1.7;
+  max-width: 560px; margin-left: auto; margin-right: auto;
+  animation: reveal .6s .6s both;
+}
+.hero-sub strong { color: var(--white); font-weight: 500; }
+
+.hero-ctas {
+  margin-top: 48px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  animation: reveal .6s .8s both;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cyan); color: var(--bg);
+  font-family: var(--mono); font-size: .8rem; letter-spacing: 1px;
+  padding: 14px 32px; border-radius: 4px; font-weight: 700;
+  transition: box-shadow .2s, transform .2s;
+}
+.btn-primary:hover { box-shadow: var(--glow-c); transform: translateY(-2px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(255,255,255,.15); color: var(--muted);
+  font-family: var(--mono); font-size: .8rem; letter-spacing: 1px;
+  padding: 14px 32px; border-radius: 4px;
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.btn-ghost:hover { border-color: var(--white); color: var(--white); transform: translateY(-2px); }
+
+.scroll-cue {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: .65rem; color: var(--muted); letter-spacing: 2px;
+}
+.scroll-line {
+  width: 1px; height: 56px;
+  background: linear-gradient(to bottom, var(--cyan), transparent);
+  animation: scrolldown 2s cubic-bezier(.19,1,.22,1) infinite;
+}
+@keyframes scrolldown {
+  0%{transform:scaleY(0);transform-origin:top;opacity:1}
+  50%{transform:scaleY(1);transform-origin:top}
+  50.1%{transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom;opacity:0}
+}
+
+@keyframes reveal {
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+section { position: relative; z-index: 1; padding: 120px 64px; max-width: 1320px; margin: 0 auto; }
+
+.sec-eyebrow {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: 3px;
+  color: var(--cyan); margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+}
+.sec-eyebrow::before { content:''; flex-shrink:0; width:28px; height:1px; background:var(--cyan); }
+
+.sec-title {
+  font-family: var(--display);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  color: var(--white); line-height: 1; letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+.sec-desc { font-size: 1.05rem; color: var(--muted); max-width: 600px; line-height: 1.75; }
+
+.reveal {
+  opacity: 0; transform: translateY(36px);
+  transition: opacity .7s cubic-bezier(.19,1,.22,1), transform .7s cubic-bezier(.19,1,.22,1);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   PROJECTS (ACTIVE BUILDS)
+   ============================================================ */
+.projects-grid { margin-top: 64px; display: grid; gap: 24px; }
+
+.proj-card {
+  background: var(--bg-1);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: start;
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::before {
+  content:''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--card-accent, var(--cyan)), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.proj-card:hover { border-color: rgba(255,255,255,.12); transform: translateY(-4px); }
+.proj-card:hover::before { opacity: 1; }
+.proj-card:hover { box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+
+.proj-card[data-role="lead"] { --card-accent: var(--cyan); }
+.proj-card[data-role="dev"] { --card-accent: var(--purple); }
+.proj-card[data-role="ui"] { --card-accent: var(--red); }
+
+.proj-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.proj-num {
+  font-family: var(--mono); font-size: .68rem; color: var(--card-accent, var(--cyan));
+  border: 1px solid currentColor; padding: 2px 8px; border-radius: 3px; opacity: .6;
+}
+.proj-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: .68rem; padding: 4px 12px; border-radius: 99px;
+}
+.proj-status.active { background: rgba(0,255,153,.08); border: 1px solid rgba(0,255,153,.25); color: var(--green); }
+.proj-status.dev { background: rgba(255,228,77,.08); border: 1px solid rgba(255,228,77,.25); color: var(--yellow); }
+.proj-status .blink { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse2 1.5s infinite; }
+
+.proj-name {
+  font-family: var(--display);
+  font-size: 2.2rem; letter-spacing: 1px; color: var(--white); margin-bottom: 8px;
+}
+.proj-role {
+  font-family: var(--mono); font-size: .75rem; color: var(--card-accent, var(--cyan));
+  margin-bottom: 16px; opacity: .7;
+}
+.proj-desc { color: var(--muted); line-height: 1.7; font-size: .95rem; margin-bottom: 20px; }
+
+.proj-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag {
+  font-family: var(--mono); font-size: .68rem;
+  background: var(--bg-3); color: var(--muted);
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 4px 10px; border-radius: 4px;
+}
+
+.proj-icon {
+  width: 64px; height: 64px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+  font-size: 1.8rem; flex-shrink: 0;
+}
+
+/* ============================================================
+   PORTFOLIO — UI & SCRIPTING
+   ============================================================ */
+.portfolio-filters {
+  display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap;
+}
+.pf-btn {
+  font-family: var(--mono); font-size: .75rem; letter-spacing: 1px;
+  color: var(--muted); border: 1px solid transparent;
+  padding: 8px 20px; border-radius: 4px; transition: all .2s;
+}
+.pf-btn:hover { color: var(--white); }
+.pf-btn.active {
+  color: var(--cyan); border-color: rgba(0,240,255,.3);
+  background: rgba(0,240,255,.06);
+}
+
+.port-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.port-card {
+  background: var(--bg-1);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px; overflow: hidden;
+  transition: transform .3s cubic-bezier(.19,1,.22,1), border-color .3s, box-shadow .3s;
+  cursor: none;
+}
+.port-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,.14); box-shadow: 0 24px 48px rgba(0,0,0,.5); }
+
+.port-preview {
+  height: 220px; position: relative; overflow: hidden;
+  background: var(--bg-2);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Shop UI Preview */
+.shop-preview {
+  width: 88%; max-width: 280px;
+  background: rgba(14,14,20,.9);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; overflow: hidden;
+  transform-origin: center; animation: floatcard 4s ease-in-out infinite;
+}
+@keyframes floatcard { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-8px) rotate(1deg)} }
+
+.shop-header {
+  padding: 10px 14px;
+  background: rgba(0,240,255,.08); border-bottom: 1px solid rgba(0,240,255,.15);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.shop-title { font-family: var(--mono); font-size: .65rem; color: var(--cyan); }
+.shop-coin {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: .65rem; color: var(--yellow);
+}
+.coin-icon { width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+.shop-body { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.shop-item {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 6px; padding: 8px; text-align: center;
+}
+.shop-item-icon { font-size: .9rem; margin-bottom: 4px; }
+.shop-item-name { font-family: var(--mono); font-size: .5rem; color: var(--muted); margin-bottom: 4px; }
+.shop-item-price {
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+  font-family: var(--mono); font-size: .55rem; color: var(--yellow);
+}
+.shop-item-price .ci { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+.shop-buy {
+  margin: 8px; background: var(--cyan); color: var(--bg);
+  font-family: var(--mono); font-size: .55rem; font-weight: 700;
+  padding: 5px; border-radius: 4px; text-align: center;
+}
+
+/* Hud/inventory preview */
+.hud-preview {
+  width: 88%; max-width: 280px;
+  display: flex; flex-direction: column; gap: 6px;
+  animation: floatcard 5s ease-in-out infinite;
+}
+.hud-bar {
+  background: rgba(14,14,20,.9); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px; padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hud-label { font-family: var(--mono); font-size: .6rem; color: var(--muted); width: 30px; }
+.hud-track { flex: 1; height: 5px; background: var(--bg-3); border-radius: 99px; overflow: hidden; }
+.hud-fill { height: 100%; border-radius: 99px; }
+.hud-val { font-family: var(--mono); font-size: .6rem; color: var(--white); }
+
+/* Inventory preview */
+.inv-preview {
+  width: 88%; max-width: 280px;
+  background: rgba(14,14,20,.92); border: 1px solid rgba(155,93,229,.25);
+  border-radius: 10px; overflow: hidden;
+  animation: floatcard 4.5s ease-in-out infinite;
+}
+.inv-header {
+  padding: 8px 12px; background: rgba(155,93,229,.1);
+  border-bottom: 1px solid rgba(155,93,229,.2);
+  font-family: var(--mono); font-size: .62rem; color: var(--purple);
+}
+.inv-grid { padding: 10px; display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.inv-slot {
+  aspect-ratio: 1; background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07); border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; font-size: .8rem;
+}
+.inv-slot.active { border-color: var(--purple); background: rgba(155,93,229,.1); }
+
+/* Script preview */
+.script-preview {
+  width: 90%; max-width: 290px;
+  background: #0d1117; border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; overflow: hidden; font-family: var(--mono); font-size: .6rem;
+  animation: floatcard 3.5s ease-in-out infinite;
+}
+.script-header {
+  background: #161b22; padding: 6px 12px;
+  display: flex; align-items: center; gap: 6px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.s-dot { width: 8px; height: 8px; border-radius: 50%; }
+.script-body { padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.s-line { display: flex; gap: 8px; }
+.s-num { color: #4a5568; width: 16px; text-align: right; }
+.s-kw { color: #ff79c6; }
+.s-fn { color: #50fa7b; }
+.s-str { color: #f1fa8c; }
+.s-cm { color: #6272a4; }
+.s-var { color: #8be9fd; }
+
+/* Port card info */
+.port-info { padding: 20px 24px; }
+.port-tag-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.port-type {
+  font-family: var(--mono); font-size: .68rem;
+  color: var(--cyan); opacity: .7;
+}
+.port-badge {
+  font-family: var(--mono); font-size: .6rem;
+  background: rgba(0,240,255,.07); border: 1px solid rgba(0,240,255,.2);
+  color: var(--cyan); padding: 2px 8px; border-radius: 3px;
+}
+.port-badge.script { background: rgba(155,93,229,.07); border-color: rgba(155,93,229,.2); color: var(--purple); }
+.port-name { font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+.port-desc { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+
+/* ============================================================
+   SKILLS STRIP
+   ============================================================ */
+.skills-strip { padding: 80px 64px; max-width: 1320px; margin: 0 auto; }
+.skills-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.skill-pill {
+  background: var(--bg-1); border: 1px solid rgba(255,255,255,.06);
+  border-radius: 8px; padding: 18px 20px;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color .2s, transform .2s;
+}
+.skill-pill:hover { border-color: rgba(0,240,255,.25); transform: translateY(-2px); }
+.skill-pill .ico { font-size: 1.3rem; }
+.skill-pill .name { font-family: var(--mono); font-size: .78rem; color: var(--white); }
+.skill-pill .sub { font-size: .72rem; color: var(--muted); }
+
+/* ============================================================
+   FOOTER / CONTACT
+   ============================================================ */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 80px 64px;
+  max-width: 1320px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+}
+.footer-left {}
+.footer-name {
+  font-family: var(--display); font-size: 3.5rem; color: var(--white);
+  letter-spacing: 2px; margin-bottom: 12px;
+}
+.footer-name span { color: var(--cyan); }
+.footer-desc { color: var(--muted); line-height: 1.7; margin-bottom: 32px; max-width: 420px; }
+.footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+.footer-link {
+  font-family: var(--mono); font-size: .78rem;
+  color: var(--muted); border: 1px solid rgba(255,255,255,.1);
+  padding: 10px 22px; border-radius: 4px;
+  display: flex; align-items: center; gap: 8px;
+  transition: all .2s;
+}
+.footer-link:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+
+.footer-terminal {
+  background: var(--bg-1); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px; overflow: hidden;
+}
+.ft-bar {
+  background: var(--bg-2); padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.ft-dots { display: flex; gap: 6px; }
+.ft-dot { width: 10px; height: 10px; border-radius: 50%; }
+.ft-body {
+  padding: 20px 20px; font-family: var(--mono); font-size: .82rem;
+  min-height: 180px;
+}
+.ft-line { margin-bottom: 6px; }
+.ft-p { color: var(--cyan); }
+.ft-cmd { color: var(--green); }
+.ft-out { color: var(--muted); padding-left: 16px; margin-top: 2px; }
+.ft-cursor {
+  display: inline-block; width: 8px; height: 1em; background: var(--white);
+  margin-left: 4px; vertical-align: bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.copyright {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 24px 64px 40px;
+  font-family: var(--mono); font-size: .72rem; color: var(--muted);
+  border-top: 1px solid rgba(255,255,255,.04);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  section { padding: 80px 24px; }
+  .hero { padding: 100px 24px 60px; }
+  footer { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+  .skills-strip { padding: 60px 24px; }
+  #cur-dot, #cur-ring { display: none; }
+  body { cursor: auto; }
+  .btn-primary, .btn-ghost { cursor: pointer; }
+}
+@media (max-width: 600px) {
+  .port-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
-<body id="sys-body">
+<body>
 
-    <div id="sys-loader">
-        <div id="loader-logs-container">
-            </div>
-        <div class="loader-bar-container">
-            <div class="loader-bar-fill" id="loader-fill"></div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-lines">
+    <div id="ld-log-wrap"></div>
+    <div class="ld-bar-wrap"><div class="ld-bar" id="ld-bar"></div></div>
+  </div>
+</div>
+
+<!-- BG -->
+<div class="grid-bg"></div>
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="dot"></div>
+    real_heyokiaa
+  </div>
+  <div class="nav-links">
+    <a href="#projects" class="nav-link hover-el">Projects</a>
+    <a href="#portfolio" class="nav-link hover-el">Portfolio</a>
+    <a href="#skills" class="nav-link hover-el">Skills</a>
+    <a href="#contact" class="nav-link hover-el">Contact</a>
+  </div>
+  <div class="nav-badge"><div class="pip"></div>SYS ONLINE</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-chip">ROBLOX UI DESIGNER & SCRIPTER</div>
+    <h1 class="hero-name">
+      <span class="line">real_</span>
+      <span class="line accent" data-t="heyokiaa">heyokiaa</span>
+    </h1>
+    <p class="hero-sub">
+      Building <strong>precise, scalable interfaces</strong> and <strong>tight game logic</strong> inside Roblox Studio.
+      Scale over Offset. Clean code over clutter.
+    </p>
+    <div class="hero-ctas">
+      <a href="#portfolio" class="btn-primary hover-el">View Portfolio</a>
+      <a href="#projects" class="btn-ghost hover-el">Active Projects</a>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-eyebrow reveal">ACTIVE BUILDS</div>
+  <h2 class="sec-title reveal">What I'm<br>Working On</h2>
+  <p class="sec-desc reveal">Three active Roblox projects, each at a different stage. Wearing different hats — dev, leader, designer.</p>
+
+  <div class="projects-grid">
+
+    <div class="proj-card reveal hover-el" data-role="dev" style="transition-delay:.05s">
+      <div>
+        <div class="proj-top">
+          <span class="proj-num">01</span>
+          <span class="proj-status dev"><span class="blink"></span> IN DEV</span>
         </div>
+        <div class="proj-name">Paradox</div>
+        <div class="proj-role">Developer — UI & Scripting</div>
+        <p class="proj-desc">Asymmetric horror experience in Roblox. I'm handling core UI systems and scripting the logic that makes atmosphere and mechanics click — from smooth screen effects to event-driven game states.</p>
+        <div class="proj-tags">
+          <span class="tag">LuaU</span>
+          <span class="tag">UI Design</span>
+          <span class="tag">Horror Mechanics</span>
+          <span class="tag">LocalScript</span>
+        </div>
+      </div>
+      <div class="proj-icon">👁️</div>
     </div>
 
-    <div id="cursor-core"></div>
-    <div id="cursor-ring"></div>
-    
-    <div class="ambient-grid"></div>
-    <canvas id="bg-canvas"></canvas>
-
-    <nav class="sys-nav" id="sys-nav">
-        <div class="nav-brand magic-hover">real_<span class="accent">heyokiaa</span></div>
-        <div class="nav-menu">
-            <a href="#hero" class="nav-item magic-hover">Init</a>
-            <a href="#roadmap" class="nav-item magic-hover">Roadmap</a>
-            <a href="#studio-ui" class="nav-item magic-hover">Studio_UI</a>
-            <a href="#contact" class="nav-item magic-hover">Sys_Req</a>
+    <div class="proj-card reveal hover-el" data-role="lead" style="transition-delay:.1s">
+      <div>
+        <div class="proj-top">
+          <span class="proj-num">02</span>
+          <span class="proj-status dev"><span class="blink"></span> SCALING</span>
         </div>
-        <div class="sys-status">
-            <div class="ping"></div>
-            SYS.ONLINE
+        <div class="proj-name">DEAD-SYNC</div>
+        <div class="proj-role">Dev & Team Leader</div>
+        <p class="proj-desc">Leading the dev team and group infrastructure for DEAD-SYNC. Running team coordination, maintaining code standards, and building out the systems that hold the whole project together.</p>
+        <div class="proj-tags">
+          <span class="tag">Team Lead</span>
+          <span class="tag">Systems Design</span>
+          <span class="tag">Dev Ops</span>
+          <span class="tag">LuaU</span>
         </div>
-    </nav>
-
-    <header class="hero" id="hero">
-        <div class="hero-content" id="hero-content-3d">
-            <div class="hero-label magic-hover">ROBLOX UI & SYSTEMS DEV</div>
-            <div class="glitch-wrapper">
-                <h1 class="glitch-text" data-text="real_heyokiaa">real_heyokiaa</h1>
-            </div>
-            <p class="hero-sub sys-reveal">
-                Engineering fully scaled, zero-offset interfaces and logic systems within Roblox Studio. No placeholders.
-            </p>
-        </div>
-        <div class="scroll-indicator">
-            <span>Scroll Sequence</span>
-            <div class="scroll-line"></div>
-        </div>
-    </header>
-
-    <section class="section-wrap" id="roadmap">
-        <div class="sec-header sys-reveal">
-            <div class="sec-num">01</div>
-            <h2 class="sec-title">Active Environment</h2>
-            <p class="sec-desc">Current development roadmap. Tracking logic architecture, game systems, and community management tools.</p>
-        </div>
-
-        <div class="roadmap-container">
-            <div class="roadmap-node sys-reveal magic-hover">
-                <div class="node-meta">
-                    <span>Project.Game // asymmetric_horror</span>
-                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> In Development</span>
-                </div>
-                <h3 class="node-title">Paradox</h3>
-                <p class="node-desc">Developing core game loops and mechanics for an asymmetric horror experience in Roblox. Focus on atmosphere and script efficiency.</p>
-                <div class="node-tags">
-                    <span class="sys-tag">LuaU</span>
-                    <span class="sys-tag">Core Logic</span>
-                    <span class="sys-tag">Game Design</span>
-                </div>
-            </div>
-
-            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 100ms;">
-                <div class="node-meta">
-                    <span>Project.Game // troll_action</span>
-                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> In Development</span>
-                </div>
-                <h3 class="node-title">Cat with Sword 1</h3>
-                <p class="node-desc">A highly kinetic joke/action game pitting a sword-wielding cat against gun-toting dogs. Built utilizing GML Visual logic flows.</p>
-                <div class="node-tags">
-                    <span class="sys-tag">GML Visual</span>
-                    <span class="sys-tag">Combat Systems</span>
-                </div>
-            </div>
-
-            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 200ms;">
-                <div class="node-meta">
-                    <span>Project.Game // fast_paced</span>
-                    <span class="node-status dev"><div class="ping" style="background:var(--neon-warning);"></div> Scaling</span>
-                </div>
-                <h3 class="node-title">Slaughter Idol</h3>
-                <p class="node-desc">Team coordination and structural game design for a fast-paced Roblox title. Handling developer hiring and core loop mapping.</p>
-                <div class="node-tags">
-                    <span class="sys-tag">Project Management</span>
-                    <span class="sys-tag">Mechanics</span>
-                </div>
-            </div>
-
-            <div class="roadmap-node sys-reveal magic-hover" style="transition-delay: 300ms;">
-                <div class="node-meta">
-                    <span>Project.Infra // discord_ops</span>
-                    <span class="node-status"><div class="ping"></div> Active</span>
-                </div>
-                <h3 class="node-title">LCTFD & Moon's Shop</h3>
-                <p class="node-desc">Operating complex Discord infrastructures including Liberty County Task Force (ERLC Internal Affairs) and a digital marketplace logic structure.</p>
-                <div class="node-tags">
-                    <span class="sys-tag">Community Admin</span>
-                    <span class="sys-tag">Bot Architecture</span>
-                    <span class="sys-tag">Marketplace</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-wrap" id="studio-ui">
-        <div class="sec-header sys-reveal">
-            <div class="sec-num">02</div>
-            <h2 class="sec-title">Studio UI Layouts</h2>
-            <p class="sec-desc">Strictly Roblox Studio implementations. Utilizing Kekui/AutoScale for responsive mathematical scaling (Scale > Offset). Zero external image dependencies shown here, purely procedural representations of layout structure.</p>
-        </div>
-
-        <div class="filter-sys sys-reveal" id="ui-filters">
-            <button class="filter-btn active magic-hover" data-filter="all">All.ui</button>
-            <button class="filter-btn magic-hover" data-filter="video">Interactions.mp4</button>
-            <button class="filter-btn magic-hover" data-filter="photo">Layouts.png</button>
-            <button class="filter-btn magic-hover" data-filter="shop">Shops.system</button>
-        </div>
-
-        <div class="gallery-grid" id="ui-grid">
-            </div>
-    </section>
-
-    <footer class="terminal-footer section-wrap" id="contact">
-        <div class="footer-info sys-reveal">
-            <div class="footer-brand">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--neon-primary)">
-                    <path d="M12 2L2 22h20L12 2zm0 6l5 10H7l5-10z"/>
-                </svg>
-                real_heyokiaa
-            </div>
-            <p style="color:var(--text-300); max-width:400px;">
-                Constructing scalable user interfaces and game logic in Roblox. Rejecting Offset, embracing Scale. System architecture built to last.
-            </p>
-            
-            <div class="social-matrix">
-                <a href="#" class="soc-link magic-hover" aria-label="Roblox">
-                    <svg viewBox="0 0 24 24"><path d="M5.3 1.9L1.9 20.7l16.8 3.4L22.1 5.3 5.3 1.9zm8.5 12.8l-3.8-.8.8-3.8 3.8.8-.8 3.8z"/></svg>
-                </a>
-                <a href="#" class="soc-link magic-hover" aria-label="Discord">
-                    <svg viewBox="0 0 24 24"><path d="M20.3 5.5c-1.6-.7-3.3-1.1-5.1-1.3-.2.4-.4.8-.6 1.3-2-.3-4-.3-6 0-.2-.5-.4-.9-.6-1.3-1.8.2-3.5.6-5.1 1.3C-.2 14.6-1 20 1.5 22.8c2.1 1.6 4.1 2.5 6.1 3.1.5-.7.9-1.4 1.3-2.1-1.1-.3-2.1-.8-3-1.4.2-.1.4-.3.6-.5 4.3 2 9.1 2 13.4 0 .2.2.4.4.6.5-.9.6-1.9 1-3 1.4.4.8.9 1.5 1.3 2.1 2-.6 4-1.5 6.1-3.1 2.8-3.3 1.6-9.6-3-17.3zm-11.6 12c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1 2.7-2.4 2.7zm6.6 0c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7c1.3 0 2.4 1.2 2.4 2.7s-1.1 2.7-2.4 2.7z"/></svg>
-                </a>
-            </div>
-
-            <div class="copyright-line">
-                © <span id="sys-year"></span> real_heyokiaa. All subroutines secure.
-            </div>
-        </div>
-
-        <div class="terminal-ui sys-reveal">
-            <div class="term-header">
-                <div class="term-dots">
-                    <div class="term-dot td-r"></div>
-                    <div class="term-dot td-y"></div>
-                    <div class="term-dot td-g"></div>
-                </div>
-                <div class="term-title">contact.exe - sys.terminal</div>
-            </div>
-            <div class="term-body" id="term-output">
-                <div class="term-line">
-                    <span class="term-prompt">user@sys:~$</span><span class="term-cmd"> ping real_heyokiaa</span>
-                </div>
-                <div class="term-out">PING heyokiaa (127.0.0.1): 56 data bytes<br>64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.042 ms</div>
-                
-                <div class="term-line" style="margin-top:16px;">
-                    <span class="term-prompt">user@sys:~$</span><span class="term-cmd"> sys.info --roles</span>
-                </div>
-                <div class="term-out">["UI_Designer", "Roblox_Dev", "Scripter", "Video_Editor"]</div>
-                
-                <div class="term-input-line">
-                    <span class="term-prompt">user@sys:~$</span>
-                    <span style="color:var(--text-400)">_awaiting_input...</span>
-                    <span class="term-cursor"></span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <div id="lightbox-sys">
-        <div class="lb-container">
-            <div class="lb-header">
-                <div>
-                    <h3 class="lb-title" id="lb-title"></h3>
-                    <div class="lb-meta" id="lb-meta"></div>
-                </div>
-                <button class="lb-close magic-hover" id="lb-close">
-                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button>
-            </div>
-            <div class="lb-media-stage" id="lb-media">
-                </div>
-        </div>
-        <div class="lb-controls">
-            <button class="lb-btn magic-hover" id="lb-prev">
-                <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-            </button>
-            <button class="lb-btn magic-hover" id="lb-next">
-                <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-            </button>
-        </div>
+      </div>
+      <div class="proj-icon">⚡</div>
     </div>
 
-    <script>
-        /**
-         * ------------------------------------------------------------------------
-         * I. SYSTEM BOOT SEQUENCE & LOADER
-         * ------------------------------------------------------------------------
-         */
-        document.getElementById('sys-year').textContent = new Date().getFullYear();
+    <div class="proj-card reveal hover-el" data-role="ui" style="transition-delay:.15s">
+      <div>
+        <div class="proj-top">
+          <span class="proj-num">03</span>
+          <span class="proj-status active"><span class="blink"></span> ACTIVE</span>
+        </div>
+        <div class="proj-name">Critical Velocity</div>
+        <div class="proj-role">Leader</div>
+        <p class="proj-desc">Leading Critical Velocity — a fast-paced Roblox title. Overseeing direction, managing the team, and making sure the game's identity stays sharp from design to mechanics.</p>
+        <div class="proj-tags">
+          <span class="tag">Leadership</span>
+          <span class="tag">Fast-Paced</span>
+          <span class="tag">Game Design</span>
+        </div>
+      </div>
+      <div class="proj-icon">🏎️</div>
+    </div>
 
-        const bootLogs = [
-            "Initializing memory matrix...",
-            "Loading Kekui auto-scale dependencies...",
-            "Resolving AspectRatioConstraints...",
-            "Bypassing UIGridLayout conflicts...",
-            "Mounting custom cursors...",
-            "Parsing real_heyokiaa profile...",
-            "System ready. Executing DOM."
-        ];
-        
-        const loaderContainer = document.getElementById('loader-logs-container');
-        const loaderFill = document.getElementById('loader-fill');
-        const sysLoader = document.getElementById('sys-loader');
+  </div>
+</section>
 
-        let logIndex = 0;
-        let progress = 0;
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="sec-eyebrow reveal">UI & SCRIPTING WORK</div>
+  <h2 class="sec-title reveal">Portfolio</h2>
+  <p class="sec-desc reveal">Interface layouts and scripting examples. Scale-first, math-correct, no Offset hacks. Click to expand.</p>
 
-        function simulateBoot() {
-            if (logIndex < bootLogs.length) {
-                const log = document.createElement('div');
-                log.className = 'loader-log';
-                
-                // Add timestamp
-                const date = new Date();
-                const timeStr = `[${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}.${date.getMilliseconds().toString().padStart(3, '0')}]`;
-                
-                log.innerHTML = `<span class="timestamp">${timeStr}</span> <span class="msg">${bootLogs[logIndex]}</span>`;
-                loaderContainer.appendChild(log);
-                
-                progress += (100 / bootLogs.length);
-                loaderFill.style.width = `${progress}%`;
-                
-                logIndex++;
-                setTimeout(simulateBoot, Math.random() * 150 + 50);
-            } else {
-                setTimeout(() => {
-                    sysLoader.classList.add('boot-complete');
-                    document.body.style.overflow = 'auto'; // allow scroll
-                    initScrollReveals(); // trigger reveals
-                }, 400);
-            }
-        }
-        
-        // Lock scroll during boot
-        document.body.style.overflow = 'hidden';
-        window.addEventListener('load', () => setTimeout(simulateBoot, 200));
+  <div class="portfolio-filters reveal" id="pf-filters" style="margin-top:40px;">
+    <button class="pf-btn active hover-el" data-f="all">All</button>
+    <button class="pf-btn hover-el" data-f="ui">UI Design</button>
+    <button class="pf-btn hover-el" data-f="script">Scripting</button>
+    <button class="pf-btn hover-el" data-f="shop">Shop Systems</button>
+  </div>
 
-        /**
-         * ------------------------------------------------------------------------
-         * II. MAGNETIC CUSTOM CURSOR ENGINE
-         * ------------------------------------------------------------------------
-         */
-        const curCore = document.getElementById('cursor-core');
-        const curRing = document.getElementById('cursor-ring');
-        
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let ringX = mouseX;
-        let ringY = mouseY;
-        
-        // Touch device detection
-        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  <div class="port-grid" id="port-grid">
 
-        if (!isTouch) {
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                // Instant follow for core
-                curCore.style.left = `${mouseX}px`;
-                curCore.style.top = `${mouseY}px`;
-            });
+    <!-- SHOP + COIN UI -->
+    <div class="port-card reveal hover-el" data-cat="shop ui" style="transition-delay:.05s">
+      <div class="port-preview" style="background:linear-gradient(135deg,#0e0e14,#0a1520);">
+        <div class="shop-preview">
+          <div class="shop-header">
+            <span class="shop-title">STORE</span>
+            <div class="shop-coin"><div class="coin-icon"></div>4,200</div>
+          </div>
+          <div class="shop-body">
+            <div class="shop-item">
+              <div class="shop-item-icon">⚔️</div>
+              <div class="shop-item-name">Sword</div>
+              <div class="shop-item-price"><div class="ci"></div>800</div>
+            </div>
+            <div class="shop-item">
+              <div class="shop-item-icon">🛡️</div>
+              <div class="shop-item-name">Shield</div>
+              <div class="shop-item-price"><div class="ci"></div>600</div>
+            </div>
+            <div class="shop-item">
+              <div class="shop-item-icon">💊</div>
+              <div class="shop-item-name">Heal</div>
+              <div class="shop-item-price"><div class="ci"></div>200</div>
+            </div>
+            <div class="shop-item">
+              <div class="shop-item-icon">🔮</div>
+              <div class="shop-item-name">Boost</div>
+              <div class="shop-item-price"><div class="ci"></div>1,200</div>
+            </div>
+          </div>
+          <div class="shop-buy">BUY ITEM</div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">UI Design</span>
+          <span class="port-badge">Shop + Coin</span>
+        </div>
+        <div class="port-name">Shop & Coin System UI</div>
+        <p class="port-desc">Currency display, item grid, and buy flow. Built with Scale values only — no Offset. UIAspectRatioConstraint on every slot.</p>
+      </div>
+    </div>
 
-            // Smooth follow for ring
-            function animateCursor() {
-                ringX += (mouseX - ringX) * 0.2;
-                ringY += (mouseY - ringY) * 0.2;
-                curRing.style.left = `${ringX}px`;
-                curRing.style.top = `${ringY}px`;
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
+    <!-- HUD / STATUS BARS -->
+    <div class="port-card reveal hover-el" data-cat="ui" style="transition-delay:.1s">
+      <div class="port-preview" style="background:linear-gradient(135deg,#0d0d14,#14101a);">
+        <div class="hud-preview">
+          <div class="hud-bar">
+            <span class="hud-label">HP</span>
+            <div class="hud-track"><div class="hud-fill" style="width:72%;background:var(--red);box-shadow:0 0 8px var(--red);"></div></div>
+            <span class="hud-val">72</span>
+          </div>
+          <div class="hud-bar">
+            <span class="hud-label">SP</span>
+            <div class="hud-track"><div class="hud-fill" style="width:45%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></div></div>
+            <span class="hud-val">45</span>
+          </div>
+          <div class="hud-bar">
+            <span class="hud-label">EXP</span>
+            <div class="hud-track"><div class="hud-fill" style="width:88%;background:var(--yellow);box-shadow:0 0 8px var(--yellow);"></div></div>
+            <span class="hud-val">88%</span>
+          </div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">UI Design</span>
+          <span class="port-badge">HUD</span>
+        </div>
+        <div class="port-name">Player HUD Bars</div>
+        <p class="port-desc">HP, Stamina, and EXP bars. TweenService-driven fill animations. Anchored top-left with Scale positioning so no bar ever floats on 16:9 or mobile.</p>
+      </div>
+    </div>
 
-            // Magnetic logic for interactive elements
-            const setupMagneticHover = () => {
-                document.querySelectorAll('.magic-hover, a, button').forEach(el => {
-                    // Prevent duplicate listeners
-                    if(el.dataset.magInit) return;
-                    el.dataset.magInit = true;
+    <!-- INVENTORY -->
+    <div class="port-card reveal hover-el" data-cat="ui" style="transition-delay:.15s">
+      <div class="port-preview" style="background:linear-gradient(135deg,#0e0e18,#10091a);">
+        <div class="inv-preview">
+          <div class="inv-header">INVENTORY — 6/16 SLOTS</div>
+          <div class="inv-grid">
+            <div class="inv-slot active">⚔️</div>
+            <div class="inv-slot">🛡️</div>
+            <div class="inv-slot">💊</div>
+            <div class="inv-slot">🔮</div>
+            <div class="inv-slot">🎯</div>
+            <div class="inv-slot">📦</div>
+            <div class="inv-slot"></div>
+            <div class="inv-slot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">UI Design</span>
+          <span class="port-badge">Inventory</span>
+        </div>
+        <div class="port-name">Inventory Grid System</div>
+        <p class="port-desc">Drag-capable item slots. UIGridLayout handles slot sizing — guaranteed square via UIAspectRatioConstraint. Active slot highlight on select.</p>
+      </div>
+    </div>
 
-                    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-magnetic'));
-                    el.addEventListener('mouseleave', () => {
-                        document.body.classList.remove('cursor-magnetic');
-                        curRing.style.transform = `translate(-50%, -50%)`; // reset
-                    });
-                    
-                    // Simple magnetic pull
-                    el.addEventListener('mousemove', (e) => {
-                        const rect = el.getBoundingClientRect();
-                        const x = e.clientX - rect.left - rect.width / 2;
-                        const y = e.clientY - rect.top - rect.height / 2;
-                        
-                        // Move element slightly
-                        el.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
-                        // Snap ring to element center
-                        ringX = rect.left + rect.width / 2;
-                        ringY = rect.top + rect.height / 2;
-                    });
-                    
-                    el.addEventListener('mouseleave', () => {
-                        el.style.transform = `translate(0px, 0px)`;
-                    });
-                });
-            };
-            setupMagneticHover(); // Initial run
-        }
+    <!-- SCRIPT — TWEEN -->
+    <div class="port-card reveal hover-el" data-cat="script" style="transition-delay:.05s">
+      <div class="port-preview" style="background:#0d1117;">
+        <div class="script-preview">
+          <div class="script-header">
+            <div class="s-dot" style="background:#ff5f57"></div>
+            <div class="s-dot" style="background:#febc2e"></div>
+            <div class="s-dot" style="background:#28c840"></div>
+            <span style="font-size:.6rem;color:#4a5568;margin-left:auto">TweenHandler.lua</span>
+          </div>
+          <div class="script-body">
+            <div class="s-line"><span class="s-num">1</span><span class="s-cm">-- Smooth UI tween</span></div>
+            <div class="s-line"><span class="s-num">2</span><span class="s-kw">local </span><span class="s-var">TS</span> = <span class="s-fn">game</span>:GetService(<span class="s-str">"TweenService"</span>)</div>
+            <div class="s-line"><span class="s-num">3</span><span class="s-kw">local </span><span class="s-var">info</span> = <span class="s-fn">TweenInfo</span>.<span class="s-fn">new</span>(0.4)</div>
+            <div class="s-line"><span class="s-num">4</span><span class="s-kw">local </span><span class="s-var">tween</span> = <span class="s-var">TS</span>:<span class="s-fn">Create</span>(<span class="s-var">frame</span>, <span class="s-var">info</span>, {</div>
+            <div class="s-line"><span class="s-num">5</span>&nbsp;&nbsp;<span class="s-var">Position</span> = <span class="s-fn">UDim2</span>.<span class="s-fn">new</span>(0.5,0,0.5,0)</div>
+            <div class="s-line"><span class="s-num">6</span>})</div>
+            <div class="s-line"><span class="s-num">7</span><span class="s-var">tween</span>:<span class="s-fn">Play</span>()</div>
+          </div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">Scripting</span>
+          <span class="port-badge script">LuaU</span>
+        </div>
+        <div class="port-name">TweenService UI Handler</div>
+        <p class="port-desc">Reusable tween module for UI transitions. EasingStyle.Quart, Out direction. Handles open/close states cleanly without jank or overlapping tweens.</p>
+      </div>
+    </div>
 
-        /**
-         * ------------------------------------------------------------------------
-         * III. HTML5 CANVAS BACKGROUND (INTERACTIVE DATA NODES)
-         * ------------------------------------------------------------------------
-         */
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let nodes = [];
+    <!-- SCRIPT — REMOTE EVENT -->
+    <div class="port-card reveal hover-el" data-cat="script" style="transition-delay:.1s">
+      <div class="port-preview" style="background:#0d1117;">
+        <div class="script-preview">
+          <div class="script-header">
+            <div class="s-dot" style="background:#ff5f57"></div>
+            <div class="s-dot" style="background:#febc2e"></div>
+            <div class="s-dot" style="background:#28c840"></div>
+            <span style="font-size:.6rem;color:#4a5568;margin-left:auto">ShopHandler.server.lua</span>
+          </div>
+          <div class="script-body">
+            <div class="s-line"><span class="s-num">1</span><span class="s-cm">-- Server shop handler</span></div>
+            <div class="s-line"><span class="s-num">2</span><span class="s-kw">local </span><span class="s-var">buyEvent</span> = <span class="s-var">RE</span>.BuyItem</div>
+            <div class="s-line"><span class="s-num">3</span><span class="s-var">buyEvent</span>.<span class="s-var">OnServerEvent</span>:<span class="s-fn">Connect</span>(<span class="s-kw">function</span>(<span class="s-var">plr</span>, <span class="s-var">item</span>)</div>
+            <div class="s-line"><span class="s-num">4</span>&nbsp;&nbsp;<span class="s-kw">if </span><span class="s-fn">canAfford</span>(<span class="s-var">plr</span>, <span class="s-var">item</span>.cost) <span class="s-kw">then</span></div>
+            <div class="s-line"><span class="s-num">5</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="s-fn">deductCoins</span>(<span class="s-var">plr</span>, <span class="s-var">item</span>.cost)</div>
+            <div class="s-line"><span class="s-num">6</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="s-fn">giveItem</span>(<span class="s-var">plr</span>, <span class="s-var">item</span>)</div>
+            <div class="s-line"><span class="s-num">7</span>&nbsp;&nbsp;<span class="s-kw">end</span></div>
+            <div class="s-line"><span class="s-num">8</span><span class="s-kw">end</span>)</div>
+          </div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">Scripting</span>
+          <span class="port-badge script">Server</span>
+        </div>
+        <div class="port-name">Shop Purchase Handler</div>
+        <p class="port-desc">Server-side RemoteEvent handler for shop purchases. Validates balance, deducts coins, and grants items — all server-authoritative, no client trust.</p>
+      </div>
+    </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class SysNode {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 1.5 + 0.5;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
-                ctx.fill();
-            }
-        }
-
-        function initNodes() {
-            nodes = [];
-            const count = Math.floor((canvas.width * canvas.height) / 25000); // density
-            for (let i = 0; i < count; i++) nodes.push(new SysNode());
-        }
-
-        function animateNodes() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < nodes.length; i++) {
-                nodes[i].update();
-                nodes[i].draw();
-
-                // Connect to cursor
-                const dxMouse = mouseX - nodes[i].x;
-                const dyMouse = mouseY - nodes[i].y;
-                const distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
-                
-                if (distMouse < 150 && !isTouch) {
-                    ctx.beginPath();
-                    ctx.moveTo(nodes[i].x, nodes[i].y);
-                    ctx.lineTo(mouseX, mouseY);
-                    ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 - distMouse/150})`;
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
-
-                // Connect to other nodes
-                for (let j = i; j < nodes.length; j++) {
-                    const dx = nodes[i].x - nodes[j].x;
-                    const dy = nodes[i].y - nodes[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(nodes[i].x, nodes[i].y);
-                        ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(100, 100, 150, ${0.1 - dist/1000})`;
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateNodes);
-        }
-        initNodes();
-        animateNodes();
-
-        /**
-         * ------------------------------------------------------------------------
-         * IV. PARALLAX & SCROLL LOGIC
-         * ------------------------------------------------------------------------
-         */
-        // 3D Mouse Parallax for Hero
-        const heroContent = document.getElementById('hero-content-3d');
-        if (!isTouch) {
-            document.addEventListener('mousemove', (e) => {
-                const x = (window.innerWidth / 2 - e.pageX) / 40;
-                const y = (window.innerHeight / 2 - e.pageY) / 40;
-                heroContent.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-            });
-        }
-
-        // Navbar hide on scroll down
-        const sysNav = document.getElementById('sys-nav');
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                sysNav.classList.add('hide');
-            } else {
-                sysNav.classList.remove('hide');
-            }
-            lastScroll = currentScroll;
-        });
-
-        // Intersection Observer for Scroll Reveals
-        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-        const revealObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    obs.unobserve(entry.target);
-                }
-            });
-        }, revealOptions);
-
-        function initScrollReveals() {
-            document.querySelectorAll('.sys-reveal').forEach(el => revealObserver.observe(el));
-        }
-
-        /**
-         * ------------------------------------------------------------------------
-         * V. STUDIO UI GALLERY DATA & 3D TILT RENDERER
-         * ------------------------------------------------------------------------
-         */
-        const uiData = [
-            {
-                id: 1, type: 'shop', format: 'photo', title: 'Simulator Store Core',
-                tech: 'Kekui AutoScale • UIGridLayout',
-                desc: 'A procedural recreation of a simulator shop UI. Converted fully to Scale values to prevent mobile overflow.',
-                bgClass: 'media-bg-1'
-            },
-            {
-                id: 2, type: 'hud', format: 'video', title: 'Inventory Drag Node',
-                tech: 'UserInputService • AbsolutePosition',
-                desc: 'Interactive visual showing the logic flow of dragging an item slot. Math applied to retain UIAspectRatioConstraint during drag.',
-                bgClass: 'media-bg-2'
-            },
-            {
-                id: 3, type: 'shop', format: 'photo', title: 'Daily Rewards Modal',
-                tech: 'AnchorPoint 0.5 • UIStroke',
-                desc: 'Center-anchored popup layout. Perfect aspect ratio maintained across all device emulations in Studio.',
-                bgClass: 'media-bg-3'
-            },
-            {
-                id: 4, type: 'hud', format: 'video', title: 'Trading System UX',
-                tech: 'TweenService • LocalScript',
-                desc: 'Recording of the lock/accept visual feedback loop in a two-player trading window.',
-                bgClass: 'media-bg-4'
-            },
-            {
-                id: 5, type: 'hud', format: 'photo', title: 'Settings Panel Config',
-                tech: 'UIListLayout • CanvasSize',
-                desc: 'Scrollable container setup ensuring content fits dynamically without breaking the outer frame bounds.',
-                bgClass: 'media-bg-1'
-            },
-            {
-                id: 6, type: 'shop', format: 'video', title: 'Gacha Spin Mechanic',
-                tech: 'Rotation • EasingStyles',
-                desc: 'Wheel layout relying on strict AnchorPoints to ensure rotation happens from the exact geometric center.',
-                bgClass: 'media-bg-2'
-            }
-        ];
-
-        const gridEl = document.getElementById('ui-grid');
-        const filters = document.querySelectorAll('.filter-btn');
-
-        // SVG Icons
-        const iconVid = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-        const iconPic = `<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
-
-        function renderGallery(filter = 'all') {
-            gridEl.innerHTML = '';
-            
-            const filtered = filter === 'all' ? uiData : uiData.filter(d => d.type === filter || d.format === filter);
-
-            filtered.forEach((item, i) => {
-                const delay = ((i % 3) * 100) + 'ms';
-                const icon = item.format === 'video' ? iconVid : iconPic;
-                
-                // Procedural wireframe structure
-                const wireframeHTML = `
-                    <div class="wireframe-ui">
-                        <div class="wire-header"></div>
-                        <div class="wire-grid">
-                            <div class="wire-box"></div><div class="wire-box alt"></div>
-                            <div class="wire-box alt"></div><div class="wire-box"></div>
-                        </div>
-                    </div>
-                `;
-
-                const card = document.createElement('div');
-                card.className = `ui-card sys-reveal magic-hover`;
-                card.style.transitionDelay = delay;
-                card.innerHTML = `
-                    <div class="card-media ${item.bgClass}">
-                        <div class="media-type-icon">${icon} ${item.format.toUpperCase()}</div>
-                        ${wireframeHTML}
-                    </div>
-                    <div class="card-info">
-                        <h3 class="card-title">${item.title}</h3>
-                        <div class="card-tech">${item.tech}</div>
-                        <p class="card-desc">${item.desc}</p>
-                        <div class="card-action">View Logic Sequence <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
-                    </div>
-                `;
-
-                // 3D Tilt Logic
-                if (!isTouch) {
-                    card.addEventListener('mousemove', (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left; // x position within the element.
-                        const y = e.clientY - rect.top;  // y position within the element.
-                        
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
-                        
-                        const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
-                        const rotateY = ((x - centerX) / centerX) * 10;
-                        
-                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                    });
-                    
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                    });
-                }
-
-                // Open Lightbox Event
-                card.addEventListener('click', () => openLightbox(item, filtered));
-                gridEl.appendChild(card);
-            });
-            
-            // Re-init reveals & cursor tracking for new DOM elements
-            setTimeout(() => {
-                initScrollReveals();
-                if(typeof setupMagneticHover === 'function') setupMagneticHover();
-            }, 50);
-        }
-
-        // Filtering bindings
-        filters.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                filters.forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                renderGallery(e.target.dataset.filter);
-            });
-        });
-
-        renderGallery(); // Initial render
-
-        /**
-         * ------------------------------------------------------------------------
-         * VI. LIGHTBOX (MODAL) SYSTEM
-         * ------------------------------------------------------------------------
-         */
-        const lbSys = document.getElementById('lightbox-sys');
-        const lbTitle = document.getElementById('lb-title');
-        const lbMeta = document.getElementById('lb-meta');
-        const lbMedia = document.getElementById('lb-media');
-        
-        let currentLbSet = [];
-        let currentLbIndex = 0;
-
-        function updateLightboxUI() {
-            const item = currentLbSet[currentLbIndex];
-            lbTitle.textContent = item.title;
-            lbMeta.textContent = `sys_data // ${item.tech}`;
-            
-            // Re-inject wireframe as placeholder
-            lbMedia.className = `lb-media-stage ${item.bgClass}`;
-            lbMedia.innerHTML = `
-                <div class="wireframe-ui">
-                    <div class="wire-header"></div>
-                    <div class="wire-grid">
-                        <div class="wire-box"></div><div class="wire-box alt"></div>
-                        <div class="wire-box alt"></div><div class="wire-box"></div>
-                    </div>
+    <!-- SHOP MODAL -->
+    <div class="port-card reveal hover-el" data-cat="shop ui" style="transition-delay:.15s">
+      <div class="port-preview" style="background:linear-gradient(135deg,#0c0e18,#0c1218);">
+        <div class="shop-preview" style="animation-delay:.5s;">
+          <div class="shop-header" style="background:rgba(155,93,229,.12);border-bottom-color:rgba(155,93,229,.2);">
+            <span class="shop-title" style="color:var(--purple);">DAILY OFFERS</span>
+            <div class="shop-coin" style="color:var(--green);">
+              <div class="coin-icon" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
+              12,500
+            </div>
+          </div>
+          <div class="shop-body">
+            <div class="shop-item" style="border-color:rgba(155,93,229,.2);grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left;">
+              <div style="font-size:1.4rem">⭐</div>
+              <div>
+                <div class="shop-item-name" style="font-size:.6rem;color:var(--purple);">FEATURED</div>
+                <div style="font-family:var(--mono);font-size:.65rem;color:var(--white);">VIP Gamepass</div>
+                <div class="shop-item-price" style="justify-content:flex-start;">
+                  <div class="ci" style="background:var(--green);"></div>
+                  <span style="color:var(--green);">9,999</span>
                 </div>
-            `;
-        }
+              </div>
+            </div>
+            <div class="shop-item">
+              <div class="shop-item-icon">💣</div>
+              <div class="shop-item-name">Bomb</div>
+              <div class="shop-item-price"><div class="ci"></div>450</div>
+            </div>
+            <div class="shop-item">
+              <div class="shop-item-icon">🧪</div>
+              <div class="shop-item-name">Potion</div>
+              <div class="shop-item-price"><div class="ci"></div>300</div>
+            </div>
+          </div>
+          <div class="shop-buy" style="background:var(--purple);">BUY SELECTED</div>
+        </div>
+      </div>
+      <div class="port-info">
+        <div class="port-tag-row">
+          <span class="port-type">UI Design</span>
+          <span class="port-badge">Daily Shop</span>
+        </div>
+        <div class="port-name">Daily Offers Modal</div>
+        <p class="port-desc">Featured item spotlight + standard grid. Scale-first layout with a coin balance display. Opens via TweenService slide-in from bottom.</p>
+      </div>
+    </div>
 
-        function openLightbox(item, dataset) {
-            currentLbSet = dataset;
-            currentLbIndex = dataset.findIndex(d => d.id === item.id);
-            updateLightboxUI();
-            lbSys.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+  </div>
+</section>
 
-        function closeLightbox() {
-            lbSys.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+<!-- SKILLS -->
+<div class="skills-strip" id="skills">
+  <div class="sec-eyebrow reveal">TOOLSET</div>
+  <h2 class="sec-title reveal">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-pill reveal hover-el" style="transition-delay:.05s"><span class="ico">🎨</span><div><div class="name">UI Design</div><div class="sub">Roblox Studio</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.08s"><span class="ico">📜</span><div><div class="name">LuaU</div><div class="sub">Scripting</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.11s"><span class="ico">📐</span><div><div class="name">AutoScale</div><div class="sub">Scale over Offset</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.14s"><span class="ico">⚡</span><div><div class="name">TweenService</div><div class="sub">Animations</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.17s"><span class="ico">🔗</span><div><div class="name">RemoteEvents</div><div class="sub">Client-Server</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.20s"><span class="ico">🧩</span><div><div class="name">ModuleScripts</div><div class="sub">Code Architecture</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.23s"><span class="ico">👥</span><div><div class="name">Team Lead</div><div class="sub">Dev Management</div></div></div>
+    <div class="skill-pill reveal hover-el" style="transition-delay:.26s"><span class="ico">🎮</span><div><div class="name">Game Design</div><div class="sub">Mechanics & Loops</div></div></div>
+  </div>
+</div>
 
-        document.getElementById('lb-close').addEventListener('click', closeLightbox);
-        
-        document.getElementById('lb-next').addEventListener('click', () => {
-            currentLbIndex = (currentLbIndex + 1) % currentLbSet.length;
-            updateLightboxUI();
-        });
-        
-        document.getElementById('lb-prev').addEventListener('click', () => {
-            currentLbIndex = (currentLbIndex - 1 + currentLbSet.length) % currentLbSet.length;
-            updateLightboxUI();
-        });
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-left reveal">
+    <div class="footer-name">real_<span>heyokiaa</span></div>
+    <p class="footer-desc">UI designer and scripter on Roblox. Scale over Offset. Clean systems over spaghetti. Open to commissions and collabs.</p>
+    <div class="footer-links">
+      <a href="#" class="footer-link hover-el">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5.3 1.9L1.9 20.7l16.8 3.4L22.1 5.3 5.3 1.9zm8.5 12.8l-3.8-.8.8-3.8 3.8.8-.8 3.8z"/></svg>
+        Roblox
+      </a>
+      <a href="#" class="footer-link hover-el">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.5c-1.6-.7-3.3-1.1-5.1-1.3-.2.4-.4.8-.6 1.3-2-.3-4-.3-6 0-.2-.5-.4-.9-.6-1.3-1.8.2-3.5.6-5.1 1.3C-.2 14.6-1 20 1.5 22.8c2.1 1.6 4.1 2.5 6.1 3.1.5-.7.9-1.4 1.3-2.1-1.1-.3-2.1-.8-3-1.4.2-.1.4-.3.6-.5 4.3 2 9.1 2 13.4 0 .2.2.4.4.6.5-.9.6-1.9 1-3 1.4.4.8.9 1.5 1.3 2.1 2-.6 4-1.5 6.1-3.1 2.8-3.3 1.6-9.6-3-17.3zm-11.6 12c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7 2.4 1.2 2.4 2.7-1 2.7-2.4 2.7zm6.6 0c-1.3 0-2.4-1.2-2.4-2.7s1.1-2.7 2.4-2.7 2.4 1.2 2.4 2.7-1.1 2.7-2.4 2.7z"/></svg>
+        Discord
+      </a>
+    </div>
+  </div>
+  <div class="footer-terminal reveal" style="transition-delay:.1s">
+    <div class="ft-bar">
+      <div class="ft-dots">
+        <div class="ft-dot" style="background:#ff5f57"></div>
+        <div class="ft-dot" style="background:#febc2e"></div>
+        <div class="ft-dot" style="background:#28c840"></div>
+      </div>
+      <span style="font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-left:auto">contact.sh</span>
+    </div>
+    <div class="ft-body" id="ft-output"></div>
+  </div>
+</footer>
+<div class="copyright">© <span id="yr"></span> real_heyokiaa — All systems running.</div>
 
-        // Close on background click
-        lbSys.addEventListener('click', (e) => {
-            if (e.target === lbSys) closeLightbox();
-        });
+<script>
+/* ========================================================
+   YEAR
+   ======================================================== */
+document.getElementById('yr').textContent = new Date().getFullYear();
 
-    </script>
+/* ========================================================
+   LOADER
+   ======================================================== */
+const logs = [
+  "Booting real_heyokiaa.sys...",
+  "Loading Scale constraints...",
+  "Resolving UIGridLayout...",
+  "Mounting cursor engine...",
+  "Parsing project manifest...",
+  "Linking portfolio assets...",
+  "All systems nominal. Launching."
+];
+const logWrap = document.getElementById('ld-log-wrap');
+const ldBar = document.getElementById('ld-bar');
+const loader = document.getElementById('loader');
+let li = 0;
+document.body.style.overflow = 'hidden';
+
+function tick() {
+  if (li >= logs.length) {
+    setTimeout(() => {
+      loader.classList.add('out');
+      document.body.style.overflow = '';
+      initReveals();
+    }, 300);
+    return;
+  }
+  const d = new Date();
+  const ts = `[${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}]`;
+  const el = document.createElement('div');
+  el.className = 'ld-line';
+  el.innerHTML = `<span class="ld-ts">${ts}</span>${logs[li]}`;
+  logWrap.appendChild(el);
+  li++;
+  ldBar.style.width = `${(li/logs.length)*100}%`;
+  setTimeout(tick, Math.random()*120 + 60);
+}
+window.addEventListener('load', () => setTimeout(tick, 150));
+
+const isTouch = navigator.maxTouchPoints > 0;
+let mx = innerWidth / 2, my = innerHeight / 2;
+window.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; });
+
+const cv = document.getElementById('particles');
+const cx = cv.getContext('2d');
+let pts = [];
+function resizeCv() { cv.width = innerWidth; cv.height = innerHeight; }
+window.addEventListener('resize', resizeCv); resizeCv();
+
+class Pt {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random()*cv.width;
+    this.y = Math.random()*cv.height;
+    this.vx = (Math.random()-.5)*.4;
+    this.vy = (Math.random()-.5)*.4;
+    this.r = Math.random()*1.2+.3;
+  }
+  step() {
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0||this.x>cv.width) this.vx*=-1;
+    if(this.y<0||this.y>cv.height) this.vy*=-1;
+  }
+  draw() {
+    cx.beginPath();
+    cx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    cx.fillStyle='rgba(0,240,255,.6)';
+    cx.fill();
+  }
+}
+function initPts() {
+  pts=[];
+  const n = Math.floor(cv.width*cv.height/18000);
+  for(let i=0;i<n;i++) pts.push(new Pt());
+}
+function drawPts() {
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<pts.length;i++) {
+    pts[i].step(); pts[i].draw();
+    // Connect close pts
+    for(let j=i+1;j<pts.length;j++) {
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<90) {
+        cx.beginPath();
+        cx.moveTo(pts[i].x,pts[i].y);
+        cx.lineTo(pts[j].x,pts[j].y);
+        cx.strokeStyle=`rgba(80,80,130,${.08-d/1100})`;
+        cx.stroke();
+      }
+    }
+    // Connect to cursor
+    if(!isTouch) {
+      const dx=pts[i].x-mx, dy=pts[i].y-my;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130) {
+        cx.beginPath();
+        cx.moveTo(pts[i].x,pts[i].y);
+        cx.lineTo(mx,my);
+        cx.strokeStyle=`rgba(0,240,255,${.15-d/900})`;
+        cx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawPts);
+}
+initPts(); drawPts();
+window.addEventListener('resize', initPts);
+
+/* ========================================================
+   NAV HIDE ON SCROLL DOWN
+   ======================================================== */
+const nav = document.getElementById('nav');
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > lastY && y > 100) nav.classList.add('hidden');
+  else nav.classList.remove('hidden');
+  lastY = y;
+});
+
+/* ========================================================
+   SCROLL REVEAL
+   ======================================================== */
+function initReveals() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+/* ========================================================
+   PORTFOLIO FILTER
+   ======================================================== */
+document.getElementById('pf-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.pf-btn');
+  if (!btn) return;
+  document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = btn.dataset.f;
+  document.querySelectorAll('#port-grid .port-card').forEach(card => {
+    const cats = card.dataset.cat || '';
+    if (f === 'all' || cats.includes(f)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+/* ========================================================
+   TERMINAL FOOTER ANIMATION
+   ======================================================== */
+const ftLines = [
+  { prompt: 'user@heyokiaa:~$', cmd: ' ping real_heyokiaa', out: 'Reply from 127.0.0.1: time=0.04ms — online' },
+  { prompt: 'user@heyokiaa:~$', cmd: ' roles --list', out: '["UI_Designer","Scripter","Team_Lead","Game_Dev"]' },
+  { prompt: 'user@heyokiaa:~$', cmd: ' projects --active', out: 'Paradox  •  DEAD-SYNC  •  Critical Velocity' },
+];
+const ftOut = document.getElementById('ft-output');
+ftLines.forEach(l => {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `<div class="ft-line"><span class="ft-p">${l.prompt}</span><span class="ft-cmd">${l.cmd}</span></div><div class="ft-out">${l.out}</div>`;
+  wrap.style.marginBottom = '12px';
+  ftOut.appendChild(wrap);
+});
+const inputLine = document.createElement('div');
+inputLine.className = 'ft-line';
+inputLine.innerHTML = `<span class="ft-p">user@heyokiaa:~$</span> <span style="color:var(--muted)">_awaiting input</span><span class="ft-cursor"></span>`;
+ftOut.appendChild(inputLine);
+</script>
 </body>
 </html>
